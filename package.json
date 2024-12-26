@@ -2,6 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "setup-project": "npm i && composer install && php artisan key:generate",
         "build": "vite build",
         "dev": "vite"
     },

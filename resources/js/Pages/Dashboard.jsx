@@ -1,11 +1,10 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import KodeInputForm from '@/Components/KodeInputForm';
-import { Head } from '@inertiajs/react';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+import PrimaryButton from "@/Components/PrimaryButton";
+import Card from "@/Components/Card";
+import CardList from "@/Components/CardList";
 
 export default function Dashboard(kerjas) {
-
-    console.log(kerjas)
-
     return (
         <AuthenticatedLayout
             header={
@@ -15,19 +14,28 @@ export default function Dashboard(kerjas) {
             }
         >
             <Head title="Dashboard" />
-
-            <div className="py-12">
+            <Card type="profile" props={kerjas.auth} />
+            <div className="overflow-auto ">
+                <PrimaryButton className="mt-3 float-right me-5">
+                    + Masuk Ujian
+                </PrimaryButton>
+            </div>
+            <div className="py-6 mx-5 ">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="bg-white p-6 shadow-sm sm:rounded-lg">
-                        <div className='flex items-center justify-between my-3'>
-                            <h3 className="text-lg font-semibold">List Ujian</h3>
-                            <KodeInputForm />
-                        </div>
-                        <table className="table-auto w-full text-left">
+                    <div className="bg-white p-3 rounded-lg shadow-lg">
+                        <h3 className="text-lg font-semibold w-full border-b-2 border-black mb-5">
+                            <span className="ps-4">Daftar Ujian</span>
+                        </h3>
+                        <CardList />
+                        {/* <table className="table-auto w-full text-left">
                             <thead>
                                 <tr>
-                                    <th className="border px-4 py-2">Mata Pelajaran</th>
-                                    <th className="border px-4 py-2 hidden sm:table-cell">Tahun Ajaran</th>
+                                    <th className="border px-4 py-2">
+                                        Mata Pelajaran
+                                    </th>
+                                    <th className="border px-4 py-2 hidden sm:table-cell">
+                                        Tahun Ajaran
+                                    </th>
                                     <th className="border px-4 py-2">Durasi</th>
                                     <th className="border px-4 py-2">Aksi</th>
                                 </tr>
@@ -35,8 +43,12 @@ export default function Dashboard(kerjas) {
                             <tbody>
                                 <tr>
                                     <td className="border px-4 py-2">judul</td>
-                                    <td className="border px-4 py-2 hidden sm:table-cell">2024/2025</td>
-                                    <td className="border px-4 py-2">1:30:00</td>
+                                    <td className="border px-4 py-2 hidden sm:table-cell">
+                                        2024/2025
+                                    </td>
+                                    <td className="border px-4 py-2">
+                                        1:30:00
+                                    </td>
                                     <td className="border px-4 py-2">
                                         <button
                                             className="bg-green-500 text-white px-4 py-2 rounded-md"
@@ -49,10 +61,12 @@ export default function Dashboard(kerjas) {
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table> */}
                     </div>
 
-                    <pre>{JSON.stringify(kerjas, undefined, 2)}</pre>
+                    {/* <pre>{JSON.stringify(kerjas, undefined, 2)}</pre> */}
+
+                    <div></div>
                 </div>
             </div>
         </AuthenticatedLayout>
