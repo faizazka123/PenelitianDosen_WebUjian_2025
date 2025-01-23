@@ -41,7 +41,7 @@ export default function Prep({kerja}) {
                                     Kembali
                                 </button>
                             </a>
-                            <a href="#" className='w-full'>
+                            <a href={route('kerjas.soal')} className='w-full'>
                                 <button className='w-full bg-blue-700 rounded-lg border-2 border-white hover:bg-blue-800 text-white py-1 px-4'>
                                     Mulai
                                 </button>
