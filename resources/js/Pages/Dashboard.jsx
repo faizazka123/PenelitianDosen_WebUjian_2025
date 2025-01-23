@@ -53,13 +53,11 @@ export default function Dashboard(kerjas) {
                                             <td className="border px-4 py-2 hidden sm:table-cell">{kerja.idUjian.tahunAjaran}</td>
                                             <td className="border px-4 py-2">{kerja.idUjian.durasi}</td>
                                             <td className="border px-4 py-2">
-                                                <a href={route('ujian.show', kerja.idKerja)}>
-
+                                                <a href={kerja.isActive ? route('ujian.show', kerja.idKerja) : '#'}>
                                                     <button
-                                                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                                                    // onClick={() =>
-                                                    //     // route('ujian',kerja.idKerja)
-                                                    // }
+                                                        className={`px-4 py-2 rounded-md ${kerja.isActive ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                            }`}
+                                                        disabled={!kerja.isActive}
                                                     >
                                                         Masuk
                                                     </button>

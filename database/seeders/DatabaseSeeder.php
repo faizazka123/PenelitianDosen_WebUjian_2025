@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         Ujian::factory()->create([
             'NIP' => Guru::inRandomOrder()->first()->NIP,
             'idMapel' => '1',
-            'judul' => 'Kata Hubung',
+            'judul' => 'Kuis Hubung',
             'tahunAjaran' => '2024/2025',
             'durasi' => Carbon::createFromTime(1, 30, 0)->toTimeString(),
             'kuota' => 15,
@@ -38,11 +38,28 @@ class DatabaseSeeder extends Seeder
         Ujian::factory()->create([
             'NIP' => Guru::inRandomOrder()->first()->NIP,
             'idMapel' => '1',
-            'judul' => 'Kata Konjungsi',
+            'judul' => 'Kuis Konjungsi',
             'tahunAjaran' => '2024/2025',
             'kodeUjian' => 'Ta7bas',
             'durasi' => Carbon::createFromTime(1, 30, 0)->toTimeString(),
             'kuota' => 15,
+        ]);
+
+        Ujian::factory()->create([
+            'NIP' => Guru::inRandomOrder()->first()->NIP,
+            'idMapel' => '1',
+            'judul' => 'Kuis Cerpen',
+            'tahunAjaran' => '2024/2025',
+            'durasi' => Carbon::createFromTime(1, 30, 0)->toTimeString(),
+            'kuota' => 15,
+        ]);
+
+        Kerja::factory()->create([
+            'idMurid' => User::query()->first()->id,
+            'idUjian' => 3,
+            'listJawaban' => 'testing',
+            'isActive' => false,
+            'nilai' => 60,
         ]);
 
         Kerja::factory(2)->create();
