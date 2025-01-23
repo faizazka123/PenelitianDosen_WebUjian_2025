@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\KerjaResource;
 use App\Models\Kerja;
 use App\Http\Requests\StoreKerjaRequest;
 use App\Http\Requests\UpdateKerjaRequest;
@@ -11,9 +12,16 @@ class ExamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function show(Kerja $kerja)
     {
-        //
+        return Inertia('Exam/Prep', [
+            'kerja' => new KerjaResource($kerja),
+        ]);
+    }
+
+    public function question()
+    {
+        return inertia('Exam/Quest');
     }
 
     /**
@@ -35,14 +43,7 @@ class ExamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kerja $kerja)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Kerja $kerja)
     {
         //

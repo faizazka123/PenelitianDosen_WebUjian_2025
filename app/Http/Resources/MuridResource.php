@@ -14,11 +14,11 @@ class MuridResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return[
-            'id' => $this->id,
-            'nama' => $this->nama,
-            'nis' => $this->nis,
-            'kelas' => $this->kelas,
+        return [
+            "id" => $this->id,
+            "nis" => $this->nis,
+            "nama" => $this->nama,
+            "kelas" => $this->kelas,
         ];
     }
 }

@@ -9,9 +9,10 @@ class StoreKerjaRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        // Hanya izinkan pengguna yang sedang login
+        return auth()->check();
     }
 
     /**
@@ -19,10 +20,18 @@ class StoreKerjaRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'kodeUjian' => 'required|string|exists:ujians,kodeUjian',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'kodeUjian.required' => 'Kode Ujian harus diisi.',
+            'kodeUjian.exists' => 'Kode Ujian tidak valid.',
         ];
     }
 }

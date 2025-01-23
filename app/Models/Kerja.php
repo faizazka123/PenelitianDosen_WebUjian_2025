@@ -9,14 +9,24 @@ class Kerja extends Model
 {
     /** @use HasFactory<\Database\Factories\KerjaFactory> */
     use HasFactory;
+    protected $primaryKey = 'idKerja';
+
+    protected $fillable = [
+        'idMurid',
+        'idUjian',
+        'listJawaban',
+        'isActive',
+        'countKecurangan',
+        'nilai',
+    ];
+
+    public function murid()
+    {
+        return $this->belongsTo(User::class, 'idMurid');
+    }
 
     public function exams()
     {
-        return $this->hasMany(Ujian::class);
-    }
-
-    public function idMurid()
-    {
-        return $this->belongsTo(User::class, 'idMurid');
+        return $this->belongsTo(Ujian::class, 'idUjian');
     }
 }

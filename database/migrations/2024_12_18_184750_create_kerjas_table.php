@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('kerjas', function (Blueprint $table) {
             $table->id('idKerja');
-            $table->unsignedBigInteger('idMurid');
-            $table->foreign('idMurid')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('idUjian');
-            $table->foreign('idUjian')->references('idUjian')->on('ujians')->onDelete('cascade');
+            $table->foreignId('idMurid')->constrained('users')->onDelete('cascade');
+            $table->foreignId('idUjian')->constrained('ujians')->onDelete('cascade');
             $table->text('listJawaban');
             $table->integer('nilai')->nullable();
             $table->boolean('isActive');

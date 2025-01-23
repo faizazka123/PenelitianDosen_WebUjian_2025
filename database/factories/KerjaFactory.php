@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Ujian;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Pest\Mutate\Mutators\Number\IncrementInteger;
 
@@ -18,8 +20,8 @@ class KerjaFactory extends Factory
     public function definition(): array
     {
         return [
-            'idMurid' => 1,
-            'idUjian' => 1,
+            'idMurid' => User::query()->first()->id,
+            'idUjian' => Ujian::inRandomOrder()->first()->id,
             'listJawaban' => 'testing',
             'isActive' => true,
         ];

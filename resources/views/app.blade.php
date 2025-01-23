@@ -18,5 +18,6 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+        <script src="{{ asset('js/flowbite.min.js') }}"></script>
     </body>
 </html>

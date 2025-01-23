@@ -1,15 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import KodeInputForm from '@/Components/KodeInputForm';
 import { Head, usePage } from '@inertiajs/react';
 
-export default function Dashboard(kerjas) {
+export default function Nilai(kerjas) {
     const { flash } = usePage().props;
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
+                    Nilai Ujian
                 </h2>
             }
         >
@@ -17,22 +16,9 @@ export default function Dashboard(kerjas) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    {flash.success && (
-                        <div className="bg-green-100 border mb-5 border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                            <strong className="font-bold">Success!</strong>
-                            <span className="block sm:inline"> {flash.success}</span>
-                        </div>
-                    )}
-                    {flash.error && (
-                        <div className="bg-red-100 border mb-5 border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <strong className="font-bold">Error!</strong>
-                            <span className="block sm:inline"> {flash.error}</span>
-                        </div>
-                    )}
                     <div className="bg-white p-6 shadow-sm sm:rounded-lg">
                         <div className='flex items-center justify-between mx-3 mb-5'>
-                            <h3 className=" text-xl font-semibold">List Ujian</h3>
-                            <KodeInputForm />
+                            <h3 className=" text-xl font-semibold">Daftar Nilai Ujian</h3>
                         </div>
                         <table className="table-auto w-full text-left">
                             <thead>
@@ -40,8 +26,7 @@ export default function Dashboard(kerjas) {
                                     <th className="border px-4 py-2">Judul</th>
                                     <th className="border px-4 py-2">Mata Pelajaran</th>
                                     <th className="border px-4 py-2 hidden sm:table-cell">Tahun Ajaran</th>
-                                    <th className="border px-4 py-2">Durasi</th>
-                                    <th className="border px-4 py-2">Aksi</th>
+                                    <th className="border px-4 py-2">Nilai</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,20 +36,7 @@ export default function Dashboard(kerjas) {
                                             <td className="border px-4 py-2">{kerja.idUjian.judul}</td>
                                             <td className="border px-4 py-2">{kerja.idUjian.idMapel.nama}</td>
                                             <td className="border px-4 py-2 hidden sm:table-cell">{kerja.idUjian.tahunAjaran}</td>
-                                            <td className="border px-4 py-2">{kerja.idUjian.durasi}</td>
-                                            <td className="border px-4 py-2">
-                                                <a href={route('ujian.show', kerja.idKerja)}>
-
-                                                    <button
-                                                        className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                                                    // onClick={() =>
-                                                    //     // route('ujian',kerja.idKerja)
-                                                    // }
-                                                    >
-                                                        Masuk
-                                                    </button>
-                                                </a>
-                                            </td>
+                                            <td className="border px-4 py-2">{kerja.nilai !== null ? kerja.nilai : "-"}</td>
                                         </tr>
                                     ))
                                 ) : (

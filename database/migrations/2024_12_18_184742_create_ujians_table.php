@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ujians', function (Blueprint $table) {
-            $table->id('idUjian');
+            $table->id();
             $table->string('NIP');
             $table->foreign('NIP')->references('NIP')->on('gurus')->onDelete('cascade');
             $table->unsignedBigInteger('idMapel');
             $table->foreign('idMapel')->references('idMapel')->on('mata_pelajarans')->onDelete('cascade');
             $table->string('judul');
+            $table->text('deskripsi')->nullable();
             $table->string('tahunAjaran');
             $table->time('durasi');
             $table->string('kodeUjian')->nullable();
+            $table->integer('kuota');
             $table->timestamps();
         });
     }
