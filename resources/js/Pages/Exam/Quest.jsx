@@ -84,6 +84,13 @@ export default function Quest({ }) {
                         </div>
                     </div>
                 </div>
+                <div className='max-w-lg w-full mt-5'>
+                    <a href="#" className='w-full'>
+                        <button className='w-full bg-gray-100 rounded-lg border-2 border-blue-700 hover:bg-blue-700 hover:text-white text-blue-700 py-1 px-4'>
+                            Selesaikan Ujian
+                        </button>
+                    </a>
+                </div>
             </div>
             {/* Menu Nomor Soal */}
             {showMenu && (
