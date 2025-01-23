@@ -49,7 +49,7 @@ export default function Prep({kerja}) {
                         </div>
                     </div>
                 </div>
-                <pre>{JSON.stringify(kerja)}</pre>
+                {/* <pre>{JSON.stringify(kerja)}</pre> */}
             </div>
         </>
     );

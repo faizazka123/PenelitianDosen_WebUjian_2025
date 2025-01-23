@@ -105,7 +105,7 @@ export default function Quest({ }) {
                                 <div className='flex justify-center items-center'>
                                     <button
                                         key={index}
-                                        className="bg-blue-600 text-white w-10 h-10 rounded-lg hover:bg-blue-800"
+                                        className="bg-gray-50 border-2 border-blue-600 text-blue-600 w-10 h-10 rounded-full hover:bg-blue-600 hover:text-white"
                                     >
                                         {index + 1}
                                     </button>
