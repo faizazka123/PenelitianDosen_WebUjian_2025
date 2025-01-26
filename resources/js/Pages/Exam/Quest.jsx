@@ -1,5 +1,5 @@
 import { Head, usePage } from "@inertiajs/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ListSoal from "@/Components/ListSoal";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -39,6 +39,30 @@ export default function Quest({ kerja, pertanyaan }) {
         window.location.href = route("dashboard");
     };
 
+    const parseDurationToMilliseconds = (duration) => {
+        const [hours, minutes, seconds] = duration.split(":").map(Number);
+        return (hours * 3600 + minutes * 60 + seconds) * 1000;
+    };
+
+    const durationInMilliseconds = useRef(parseDurationToMilliseconds(kerja.idUjian.durasi));
+
+    // Calculate the remaining time on page load
+    const getRemainingTime = () => {
+        const storedStartTime = localStorage.getItem("examStartTime");
+        if (storedStartTime) {
+            const startTime = parseInt(storedStartTime, 10);
+            const currentTime = Date.now();
+            const timeElapsed = currentTime - startTime;
+            return Math.max(durationInMilliseconds.current - timeElapsed, 0); // Prevent negative time
+        } else {
+            // If no start time exists, it's the first time the user is loading the page, so set the start time now.
+            localStorage.setItem("examStartTime", Date.now().toString());
+            return durationInMilliseconds.current; // Full duration
+        }
+    };
+
+    const remainingTime = useRef(getRemainingTime());
+
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
             handleConfirmFinish();
@@ -72,7 +96,7 @@ export default function Quest({ kerja, pertanyaan }) {
     // }, [violations]);
 
     return (
-        <AuthenticatedLayout countdown={renderer}>
+        <AuthenticatedLayout countdown={renderer} duration={remainingTime}>
             <Head title="Ujian Start" />
             <div className=" bg-gray-200 min-h-screen flex flex-col items-center">
                 <div className="py-8 me-10 w-full flex justify-end">

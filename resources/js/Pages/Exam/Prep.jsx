@@ -1,8 +1,15 @@
 import { Head, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Card from "@/Components/Card";
+import { useEffect } from "react";
 
 export default function Prep({ kerja }) {
+
+    useEffect(() => {
+        if (localStorage.getItem("examStartTime")) {
+            localStorage.removeItem("examStartTime");
+        }
+    }, []);
 
     return (
         <AuthenticatedLayout>
@@ -73,7 +80,6 @@ export default function Prep({ kerja }) {
                         </div>
                     </div>
                 </div>
-                <pre>{JSON.stringify(kerja)}</pre>
             </div>
         </AuthenticatedLayout>
     );
