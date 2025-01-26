@@ -5,11 +5,12 @@ import ListSoal from "@/Components/ListSoal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Soal from "@/Components/Soal";
 import Countdown from "react-countdown";
-import axios from 'axios';
 
-export default function Quest({ }) {
+export default function Quest({ kerja, pertanyaan }) {
     const [showMenu, setShowMenu] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const [answers, setAnswers] = useState({});
+    const [currentQuestion, setCurrentQuestion] = useState(0);
 
     const handleToggleMenu = () => {
         setShowMenu(!showMenu);
@@ -23,20 +24,25 @@ export default function Quest({ }) {
         setShowAlert(false);
     };
 
+    const handleAnswerChange = (questionId, answer) => {
+        setAnswers({ ...answers, [questionId]: answer });
+    };
+
     const handleConfirmFinish = async () => {
-        const answers = {}; // Gather answers from the state
-        await axios.post(route('kerjas.submit', { id: kerja.idKerja }), { answers })
-            .then(() => {
-                window.location.href = "/dashboard";
-            })
-            .catch((error) => console.error("Error submitting exam", error));
+        // Submit answers to the server
+        await fetch(route("kerjas.submit", { id: kerja.idKerja }), {
+            method: "POST",
+            body: JSON.stringify(answers),
+            headers: { "Content-Type": "application/json" },
+        });
+        alert("Exam submitted!");
+        window.location.href = route("dashboard");
     };
 
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
             handleConfirmFinish();
         } else {
-            // Render a countdown
             return (
                 <span>
                     {hours}:{minutes}:{seconds}
@@ -44,6 +50,26 @@ export default function Quest({ }) {
             );
         }
     };
+
+    // useEffect(() => {
+    //     const handleBlur = () => {
+    //         setViolations((prev) => prev + 1);
+    //         alert('Cheating detected! Stay focused on the exam page.');
+    //     };
+
+    //     window.addEventListener('blur', handleBlur);
+
+    //     return () => {
+    //         window.removeEventListener('blur', handleBlur);
+    //     };
+    // }, []);
+
+    // useEffect(() => {
+    //     if (violations >= 3) {
+    //         alert('You have exceeded the cheating limit. Redirecting to dashboard...');
+    //         window.location.href = route('dashboard');
+    //     }
+    // }, [violations]);
 
     return (
         <AuthenticatedLayout countdown={renderer}>
@@ -62,19 +88,33 @@ export default function Quest({ }) {
                         01:30:00
                     </span>
                 </div> */}
-                <Soal handleAlert={handleAlert} />
+                {/* <pre>{JSON.stringify(kerja)}</pre>
+
+                <div className="min-w-72">
+                    <pre>{JSON.stringify(pertanyaan)}</pre>
+                </div> */}
+
+                <Soal
+                    handleAlert={handleAlert}
+                    question={pertanyaan.data[currentQuestion]}
+                    onAnswerChange={handleAnswerChange}
+                />
                 <div className="mt-5 w-11/12">
-                    <a href="#" className="w-full">
+                    <div className="w-full">
                         <PrimaryButton
                             onClick={handleAlert}
                             className="rounded-lg py-1 px-4 bg-primary w-full"
                         >
                             Selesaikan Ujian
                         </PrimaryButton>
-                    </a>
+                    </div>
                 </div>
             </div>
-            {showMenu && <ListSoal handleToggleMenu={handleToggleMenu} />}
+            {showMenu && <ListSoal
+                handleToggleMenu={handleToggleMenu}
+                questions={pertanyaan}
+                onQuestionSelect={setCurrentQuestion}
+            />}
 
             {showAlert && (
                 <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">

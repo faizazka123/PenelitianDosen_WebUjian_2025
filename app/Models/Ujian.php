@@ -28,7 +28,7 @@ class Ujian extends Model
 
     public function pertanyaan()
     {
-        return $this->hasMany(Pertanyaan::class);
+        return $this->hasMany(Pertanyaan::class, 'idUjian');
     }
 
     public function kerjas()

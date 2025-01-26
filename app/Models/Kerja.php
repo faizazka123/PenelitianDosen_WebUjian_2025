@@ -25,7 +25,7 @@ class Kerja extends Model
         return $this->belongsTo(User::class, 'idMurid');
     }
 
-    public function exams()
+    public function ujian()
     {
         return $this->belongsTo(Ujian::class, 'idUjian');
     }

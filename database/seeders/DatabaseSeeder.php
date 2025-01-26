@@ -4,12 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Guru;
 use App\Models\Kerja;
+use App\Models\Pertanyaan;
 use App\Models\User;
 use App\Models\Ujian;
 use App\Models\MataPelajaran;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,8 +20,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory()->create([
+            'nama' => fake()->name(),
+            'nis' => 12345,
+            'kelas' => random_int(1, 3),
+            'password' => Hash::make('password'),
+        ]);
+        
         User::factory(10)->create();
         Guru::factory(10)->create();
+
 
 
         MataPelajaran::factory()->create([
@@ -52,6 +62,50 @@ class DatabaseSeeder extends Seeder
             'tahunAjaran' => '2024/2025',
             'durasi' => Carbon::createFromTime(1, 30, 0)->toTimeString(),
             'kuota' => 15,
+        ]);
+
+        Pertanyaan::factory()->create([
+            'idUjian' => 1,
+            'pertanyaan' => 'Apa ibu kota Indonesia?',
+            'pilihan1' => 'Jakarta',
+            'pilihan2' => 'Surabaya',
+            'pilihan3' => 'Bandung',
+            'pilihan4' => 'Medan',
+            'pilihan5' => null,
+            'image' => null,
+        ]);
+
+        Pertanyaan::factory()->create([
+            'idUjian' => 1,
+            'pertanyaan' => 'Siapa presiden pertama Indonesia?',
+            'pilihan1' => 'Soekarno',
+            'pilihan2' => 'Soeharto',
+            'pilihan3' => 'Joko Widodo',
+            'pilihan4' => 'Bacharuddin Jusuf Habibie',
+            'pilihan5' => null,
+            'image' => null,
+        ]);
+
+        Pertanyaan::factory()->create([
+            'idUjian' => 1,
+            'pertanyaan' => 'Apa lambang negara Indonesia?',
+            'pilihan1' => 'Garuda Pancasila',
+            'pilihan2' => 'Pohon Beringin',
+            'pilihan3' => 'Banteng',
+            'pilihan4' => 'Burung Cendrawasih',
+            'pilihan5' => null,
+            'image' => null,
+        ]);
+
+        Pertanyaan::factory()->create([
+            'idUjian' => 1,
+            'pertanyaan' => 'Berapa jumlah provinsi di Indonesia?',
+            'pilihan1' => '34',
+            'pilihan2' => '30',
+            'pilihan3' => '32',
+            'pilihan4' => '36',
+            'pilihan5' => null,
+            'image' => null,
         ]);
 
         Kerja::factory()->create([

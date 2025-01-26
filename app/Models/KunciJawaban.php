@@ -19,10 +19,10 @@ class KunciJawaban extends Model
         'is_correct',
     ];
 
-    public function pertanyaan()
-    {
-        return $this->belongsTo(Pertanyaan::class, 'idPertanyaan');
-    }
+    // public function pertanyaan()
+    // {
+    //     return $this->belongsTo(Pertanyaan::class, 'idPertanyaan');
+    // }
 
     // Relationship: Each student answer belongs to one student (nullable for correct answers)
     public function murid()

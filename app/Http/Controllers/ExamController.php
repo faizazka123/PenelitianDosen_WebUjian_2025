@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\KerjaResource;
+use App\Http\Resources\PertanyaanCollection;
+use App\Http\Resources\PertanyaanResource;
 use App\Models\Kerja;
 use App\Http\Requests\StoreKerjaRequest;
 use App\Http\Requests\UpdateKerjaRequest;
+use App\Models\Pertanyaan;
 use Illuminate\Support\Facades\Request;
 
 class ExamController extends Controller
@@ -26,36 +29,63 @@ class ExamController extends Controller
 
     public function startExam($id)
     {
-        $kerja = Kerja::with('idUjian.soals')->findOrFail($id);
+        $kerja = Kerja::findOrFail($id);
+        $kerjaResource = new KerjaResource($kerja);
 
+        $pertanyaan = Pertanyaan::where('idUjian', $kerjaResource->idUjian)->get();
+        $pertanyaanResource = PertanyaanResource::collection($pertanyaan);
+        // dd($pertanyaanResource);
         return Inertia('Exam/Quest', [
-            'kerja' => $kerja,
-            'soals' => $kerja->idUjian->pertanyaan, // Pass all the questions
-            'durasi' => $kerja->idUjian->durasi, // Pass the duration
+            'kerja' => $kerjaResource,
+            'pertanyaan' => $pertanyaanResource,
         ]);
     }
 
-    public function submitExam(Request $request, $id)
+    // public function submitExam(Request $request, $id)
+    // {
+    //     $kerja = Kerja::findOrFail($id);
+
+    //     // Process the student's answers
+    //     $answers = $request->input('answers'); // Array of answers from the frontend
+    //     $score = 0;
+
+    //     foreach ($kerja->idUjian->soals as $soal) {
+    //         if (isset($answers[$soal->id]) && $answers[$soal->id] === $soal->jawaban_benar) {
+    //             $score++;
+    //         }
+    //     }
+
+    //     // Save the score and mark the exam as completed
+    //     $kerja->nilai = $score;
+    //     $kerja->status = 'completed';
+    //     $kerja->save();
+
+    //     return redirect()->route('dashboard')->with('success', 'Ujian telah diselesaikan.');
+    // }
+
+    public function submitExam(Request $request, $idKerja)
     {
-        $kerja = Kerja::findOrFail($id);
+        $kerja = Kerja::with('idUjian.soal')->findOrFail($idKerja);
 
-        // Process the student's answers
-        $answers = $request->input('answers'); // Array of answers from the frontend
-        $score = 0;
+        $validated = $request->validate([
+            'answers' => 'required|array',
+            'answers.*' => 'integer', // Assuming answers are IDs
+        ]);
 
-        foreach ($kerja->idUjian->soals as $soal) {
-            if (isset($answers[$soal->id]) && $answers[$soal->id] === $soal->jawaban_benar) {
-                $score++;
-            }
-        }
+        // Compare answers
+        $correctAnswers = $kerja->idUjian->soal->pluck('correct_option');
+        $submittedAnswers = collect($validated['answers']);
+        $score = $submittedAnswers->intersect($correctAnswers)->count();
 
-        // Save the score and mark the exam as completed
-        $kerja->nilai = $score;
-        $kerja->status = 'completed';
-        $kerja->save();
+        // Save result
+        $kerja->update([
+            'score' => $score,
+            'status' => 'completed',
+        ]);
 
-        return redirect()->route('dashboard')->with('success', 'Ujian telah diselesaikan.');
+        return redirect()->route('dashboard')->with('success', 'Exam completed successfully!');
     }
+
 
 
 }

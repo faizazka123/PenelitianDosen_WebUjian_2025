@@ -19,10 +19,11 @@ class KerjaResource extends JsonResource
     {
         $murid = User::find($this->idMurid);
         $ujian = Ujian::find($this->idUjian);
-        return[
+
+        return [
             'idKerja' => $this->idKerja,
             'idMurid' => new MuridResource($murid), //foreign key
-            'idUjian' => new ExamResource($ujian), //foreign key
+            'idUjian' => new ExamResource(resource: $ujian), //foreign key
             'listJawaban' => $this->listJawaban,
             'nilai' => $this->nilai,
             'isActive' => $this->isActive,
