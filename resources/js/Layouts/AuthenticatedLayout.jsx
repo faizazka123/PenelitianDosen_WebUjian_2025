@@ -1,11 +1,17 @@
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
+import PrimaryButton from "@/Components/PrimaryButton";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
+import Countdown from "react-countdown";
 
-export default function AuthenticatedLayout({ header, children, title }) {
-    console.log(usePage());
+export default function AuthenticatedLayout({
+    header,
+    children,
+    title,
+    countdown = null,
+}) {
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -92,32 +98,41 @@ export default function AuthenticatedLayout({ header, children, title }) {
                         </div>
 
                         <div className="me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState
-                                    )
-                                }
-                                className={`${
-                                    showingNavigationDropdown
-                                        ? "rotate-90 "
-                                        : ""
-                                } inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-300 ease-in-out`}
-                            >
-                                <svg
-                                    className="h-6 w-6 text-black"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
+                            {countdown ? (
+                                <PrimaryButton className="bg-orange ">
+                                    <Countdown
+                                        date={Date.now() + 7200000}
+                                        renderer={countdown}
                                     />
-                                </svg>
-                            </button>
+                                </PrimaryButton>
+                            ) : (
+                                <button
+                                    onClick={() =>
+                                        setShowingNavigationDropdown(
+                                            (previousState) => !previousState
+                                        )
+                                    }
+                                    className={`${
+                                        showingNavigationDropdown
+                                            ? "rotate-90 "
+                                            : ""
+                                    } inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-300 ease-in-out`}
+                                >
+                                    <svg
+                                        className="h-6 w-6 text-black"
+                                        stroke="currentColor"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M4 6h16M4 12h16M4 18h16"
+                                        />
+                                    </svg>
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

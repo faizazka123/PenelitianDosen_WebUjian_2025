@@ -22,6 +22,7 @@ export default {
                 secondary: "#0073E6",
                 kuning: "#E3B011",
                 disable: "#747677",
+                orange: "#C44601",
             },
         },
     },
