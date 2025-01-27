@@ -107,17 +107,6 @@ export default function Quest({ kerja, pertanyaan }) {
                         Nomor Soal
                     </PrimaryButton>
                 </div>
-                {/* <div className="max-w-lg w-full mb-2">
-                    <span className="bg-red-900 text-white px-2 py-1 rounded-sm">
-                        01:30:00
-                    </span>
-                </div> */}
-                {/* <pre>{JSON.stringify(kerja)}</pre>
-
-                <div className="min-w-72">
-                    <pre>{JSON.stringify(pertanyaan)}</pre>
-                </div> */}
-
                 <Soal
                     handleAlert={handleAlert}
                     question={pertanyaan.data[currentQuestion]}

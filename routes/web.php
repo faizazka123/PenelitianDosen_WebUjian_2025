@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardGuruController;
 use App\Http\Controllers\DashboardSiswaController;
 use App\Http\Controllers\ExamController;
 use Inertia\Inertia;
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index'])->name('dashboard');
     Route::get('/nilai', [DashboardSiswaController::class, 'indexNilai'])->name('nilai');
 
+    Route::get('guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard');
 
     Route::post('/kerjas', [DashboardSiswaController::class, 'masukUjian'])->name('kerjas.store');
 
