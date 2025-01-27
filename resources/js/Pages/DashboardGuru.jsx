@@ -1,6 +1,7 @@
 import GuruAuthenticatedLayout from "@/Layouts/GuruAuthenticatedLayout";
 import CardGuru from "@/Components/CardGuru";
 import DataTableComponent from "@/Components/DataTableComponent";
+import { Link } from "@inertiajs/react";
 const DashboardGuru = () => {
     return (
         <GuruAuthenticatedLayout>
@@ -13,7 +14,9 @@ const DashboardGuru = () => {
             </div>
             <div className="font-bold flex">
                 <p>Daftar Mata pelajaran</p>
-                <p className="ms-auto text-primary">More</p>
+                <Link href="#" className="ms-auto text-primary">
+                    More
+                </Link>
             </div>
             <DataTableComponent />
         </GuruAuthenticatedLayout>
