@@ -10,6 +10,6 @@ class DashboardGuruController extends Controller
     public function index()
     {
         $userId = Auth::id(); // Get the ID of the currently authenticated user
-        dd($userId);
+        return Inertia('DashboardGuru');
     }
 }

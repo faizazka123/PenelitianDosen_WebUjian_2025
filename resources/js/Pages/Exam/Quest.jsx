@@ -6,6 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import Soal from "@/Components/Soal";
 
 export default function Quest({ kerja, pertanyaan }) {
+    console.log(`${window.LARAVEL_URL}/warning.png`);
     const [showMenu, setShowMenu] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [answers, setAnswers] = useState({});
@@ -43,7 +44,9 @@ export default function Quest({ kerja, pertanyaan }) {
         return (hours * 3600 + minutes * 60 + seconds) * 1000;
     };
 
-    const durationInMilliseconds = useRef(parseDurationToMilliseconds(kerja.idUjian.durasi));
+    const durationInMilliseconds = useRef(
+        parseDurationToMilliseconds(kerja.idUjian.durasi)
+    );
 
     // Calculate the remaining time on page load
     const getRemainingTime = () => {
@@ -130,17 +133,20 @@ export default function Quest({ kerja, pertanyaan }) {
                     </div>
                 </div>
             </div>
-            {showMenu && <ListSoal
-                handleToggleMenu={handleToggleMenu}
-                questions={pertanyaan}
-                onQuestionSelect={setCurrentQuestion}
-            />}
+            {showMenu && (
+                <ListSoal
+                    handleToggleMenu={handleToggleMenu}
+                    questions={pertanyaan}
+                    onQuestionSelect={setCurrentQuestion}
+                    currentQuestion={currentQuestion}
+                />
+            )}
 
             {showAlert && (
                 <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white max-w-lg w-5/6 p-5 rounded-lg shadow-lg flex flex-col items-center">
                         <img
-                            src="warning.png"
+                            src={`${window.LARAVEL_URL}/warning.png`}
                             className="text-lg font-bold mb-7 mt-5"
                             width={100}
                         ></img>

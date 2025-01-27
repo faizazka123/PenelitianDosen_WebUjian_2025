@@ -20,4 +20,7 @@
         @inertia
         <script src="{{ asset('js/flowbite.min.js') }}"></script>
     </body>
+    <script>
+        window.LARAVEL_URL = "http://localhost:8000";
+    </script>
 </html>

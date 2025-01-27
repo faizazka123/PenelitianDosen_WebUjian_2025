@@ -1,28 +1,17 @@
-import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
-import PrimaryButton from "@/Components/PrimaryButton";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
-import { useRef, useState } from "react";
-import Countdown from "react-countdown";
+import { useState } from "react";
+import SideNavLink from "@/Components/SideNavLink";
 
-export default function AuthenticatedLayout({
-    header,
-    children,
-    title,
-    countdown = null,
-    duration,
-}) {
-    const user = usePage().props.auth.user;
-
+const GuruAuthenticatedLayout = ({ header, children }) => {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
+        <div className="min-h-screen">
+            <nav className="bg-white">
+                <div className="mx-auto max-w-full ps-8 shadow-xl mb-2">
+                    <div className="flex h-12 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/" className="flex items-center">
@@ -32,12 +21,12 @@ export default function AuthenticatedLayout({
                                         alt="Tut Wuri Handayani"
                                     />
                                     <p className="ms-3 font-bold capitalize">
-                                        {title}
+                                        Akun Guru
                                     </p>
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            {/* <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route("dashboard")}
                                     active={route().current("dashboard")}
@@ -50,10 +39,10 @@ export default function AuthenticatedLayout({
                                 >
                                     Nilai Ujian
                                 </NavLink>
-                            </div>
+                            </div> */}
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        {/* <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -96,44 +85,35 @@ export default function AuthenticatedLayout({
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="me-2 flex items-center sm:hidden">
-                            {countdown ? (
-                                <PrimaryButton className="bg-orange ">
-                                    <Countdown
-                                        date={Date.now() + duration}
-                                        renderer={countdown}
-                                    />
-                                </PrimaryButton>
-                            ) : (
-                                <button
-                                    onClick={() =>
-                                        setShowingNavigationDropdown(
-                                            (previousState) => !previousState
-                                        )
-                                    }
-                                    className={`${
-                                        showingNavigationDropdown
-                                            ? "rotate-90 "
-                                            : ""
-                                    } inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-300 ease-in-out`}
+                            <button
+                                onClick={() =>
+                                    setShowingNavigationDropdown(
+                                        (previousState) => !previousState
+                                    )
+                                }
+                                className={`${
+                                    showingNavigationDropdown
+                                        ? "rotate-90 "
+                                        : ""
+                                } inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-300 ease-in-out`}
+                            >
+                                <svg
+                                    className="h-6 w-6 text-black"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
                                 >
-                                    <svg
-                                        className="h-6 w-6 text-black"
-                                        stroke="currentColor"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M4 6h16M4 12h16M4 18h16"
-                                        />
-                                    </svg>
-                                </button>
-                            )}
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -180,11 +160,55 @@ export default function AuthenticatedLayout({
                 </header>
             )}
 
-            <main
-                className={`${showingNavigationDropdown ? "blur-sm " : " "} `}
-            >
-                {children}
-            </main>
+            <div className="flex gap-5 min-h-screen">
+                <nav className="w-2/12 flex flex-col gap-1 pt-8 bg-abu">
+                    <div className="flex flex-col gap-10 px-8 h-full">
+                        <SideNavLink
+                            href={route("guru.dashboard")}
+                            active={route().current("guru.dashboard")}
+                        >
+                            Dashboard
+                        </SideNavLink>
+                        <SideNavLink
+                            href={route("nilai")}
+                            active={route().current("nilai")}
+                        >
+                            Nilai Ujian
+                        </SideNavLink>
+                        <SideNavLink
+                            href={route("nilai")}
+                            active={route().current("nilai")}
+                        >
+                            Nilai Ujian
+                        </SideNavLink>
+                        <SideNavLink
+                            href={route("nilai")}
+                            active={route().current("nilai")}
+                        >
+                            Nilai Ujian
+                        </SideNavLink>
+                    </div>
+                    <div className="px-8 mt-auto bg-abu">
+                        <SideNavLink
+                            href={route("logout")}
+                            method="post"
+                            as="button"
+                            className="mb-10"
+                        >
+                            Logout
+                        </SideNavLink>
+                    </div>
+                </nav>
+                <main
+                    className={`${
+                        showingNavigationDropdown ? "blur-sm " : " "
+                    } w-9/12 p-10`}
+                >
+                    {children}
+                </main>
+            </div>
         </div>
     );
-}
+};
+
+export default GuruAuthenticatedLayout;

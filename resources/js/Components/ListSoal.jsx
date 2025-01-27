@@ -1,4 +1,9 @@
-const ListSoal = ({ questions, onQuestionSelect, handleToggleMenu }) => {
+const ListSoal = ({
+    questions,
+    onQuestionSelect,
+    handleToggleMenu,
+    currentQuestion,
+}) => {
     return (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white max-w-lg w-full rounded-lg shadow-lg fixed bottom-0 left-0">
@@ -22,7 +27,11 @@ const ListSoal = ({ questions, onQuestionSelect, handleToggleMenu }) => {
                                     onQuestionSelect(index);
                                     handleToggleMenu();
                                 }}
-                                className="bg-gray-50 border-2 border-blue-600 text-blue-600 w-11 h-10 rounded-full hover:bg-blue-600 hover:text-white"
+                                className={`${
+                                    currentQuestion === index
+                                        ? "bg-primary text-white "
+                                        : ""
+                                } border-2 border-primary text-primary w-11 h-10 rounded-full`}
                             >
                                 {index + 1}
                             </button>
