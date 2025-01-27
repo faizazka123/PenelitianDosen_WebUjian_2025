@@ -24,6 +24,7 @@
         "flowbite": "^2.5.2",
         "react-countdown": "^2.3.6",
         "react-data-table-component": "^7.6.2",
+        "react-quill": "^2.0.0",
         "styled-components": "^6.1.14"
     }
 }
