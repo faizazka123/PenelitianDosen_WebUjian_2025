@@ -4,6 +4,7 @@ import { useState } from "react";
 import SideNavLink from "@/Components/SideNavLink";
 
 const GuruAuthenticatedLayout = ({ header, children }) => {
+    const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -204,6 +205,10 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                         showingNavigationDropdown ? "blur-sm " : " "
                     } w-9/12 p-10`}
                 >
+                    <div className="flex items-center gap-3 font-bold mb-4">
+                        <img src={`${LARAVEL_URL}/profileGuru.png`} />
+                        Selamat Datang, {user.nama}!
+                    </div>
                     {children}
                 </main>
             </div>
