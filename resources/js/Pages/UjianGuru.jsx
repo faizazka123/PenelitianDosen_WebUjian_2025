@@ -7,10 +7,9 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
+import * as XLSX from "xlsx";
 
 const UjianGuru = () => {
-    const [deskripsi, setDeskripsi] = useState("");
-
     const { data, setData, post, processing, errors, reset } = useForm({
         judul: "",
         mapel: "",
@@ -22,6 +21,27 @@ const UjianGuru = () => {
         durasi: "",
     });
 
+    const [deskripsi, setDeskripsi] = useState("");
+    const [soal, setSoal] = useState([]);
+
+    const handleFileUpload = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const abuf = e.target.result;
+                const wb = XLSX.read(abuf, { type: "array" });
+                const sheet = wb.Sheets[wb.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+                // Menyimpan data ke state
+                setSoal(jsonData);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    };
+
     const submit = (e) => {
         e.preventDefault();
 
@@ -32,6 +52,7 @@ const UjianGuru = () => {
         );
 
         console.log(data);
+        console.log(JSON.stringify({ soal }));
 
         // post(route("#"), {});
     };
@@ -181,6 +202,21 @@ const UjianGuru = () => {
                             }
                         />
                     </div>
+                </div>
+                <div className="mb-5">
+                    <InputLabel
+                        className="!font-bold mb-2 !text-lg"
+                        htmlFor="soal"
+                        value="Mata Pelajaran"
+                    />
+                    <TextInput
+                        id="soal"
+                        name="soal"
+                        type="file"
+                        className="w-full"
+                        placeholder="Inputkan Soal XLS"
+                        onChange={handleFileUpload}
+                    />
                 </div>
                 <div className="flex justify-end gap-10">
                     <PrimaryButton className="!px-10">Batal</PrimaryButton>
