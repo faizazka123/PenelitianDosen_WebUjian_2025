@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ujian/{id}', [ExamController::class, 'prep'])->name('kerja.show');
     Route::get('/start/{id}', [ExamController::class, 'startExam'])->name('kerjas.soal');
     Route::post('/submit/{id}', [ExamController::class, 'submitExam'])->name('kerjas.submit');
+    Route::post('/save-answer', [ExamController::class, 'saveAnswer'])->name('saveAnswer');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

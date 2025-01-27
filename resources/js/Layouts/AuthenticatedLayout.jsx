@@ -162,6 +162,7 @@ export default function AuthenticatedLayout({
                                 href={route("logout")}
                                 method='post'
                                 active={route().current("logout")}
+                                as="button"
                             >
                                 Logout
                             </ResponsiveNavLink>

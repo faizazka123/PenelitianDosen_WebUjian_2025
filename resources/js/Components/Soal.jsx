@@ -1,8 +1,11 @@
 import PrimaryButton from "./PrimaryButton";
-const Soal = ({ question, onAnswerChange }) => {
+const Soal = ({ question, onAnswerChange, selectedAnswer }) => {
+
     const handleChange = (answer) => {
-        onAnswerChange(question.id, answer);
+        onAnswerChange(question.idPertanyaan, answer);
     };
+
+    console.log(selectedAnswer)
 
     const options = [
         question.pilihan1,
@@ -32,7 +35,9 @@ const Soal = ({ question, onAnswerChange }) => {
                                 <input
                                     id={`option-${index}`}
                                     type="radio"
-                                    name={`question-${question.id}`}
+                                    name={`question-${question.idPertanyaan}`}
+                                    value={option}
+                                    // checked={selectedAnswer === option}
                                     onChange={() => handleChange(option)}
                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                 />

@@ -1,15 +1,22 @@
-import { Head, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { useState, useEffect, useRef } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ListSoal from "@/Components/ListSoal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Soal from "@/Components/Soal";
 
-export default function Quest({ kerja, pertanyaan }) {
+export default function Quest({ kerja, pertanyaan, answers: initialAnswers }) {
     const [showMenu, setShowMenu] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
-    const [answers, setAnswers] = useState({});
+    const [answers, setAnswers] = useState(initialAnswers || {});
     const [currentQuestion, setCurrentQuestion] = useState(0);
+    const { data, setData, post, processing, errors } = useForm({
+        idPertanyaan: "",
+        idMurid: "",
+        jawaban: "",
+    });
+
+    console.log
 
     const handleToggleMenu = () => {
         setShowMenu(!showMenu);
@@ -23,8 +30,30 @@ export default function Quest({ kerja, pertanyaan }) {
         setShowAlert(false);
     };
 
-    const handleAnswerChange = (questionId, answer) => {
-        setAnswers({ ...answers, [questionId]: answer });
+    const token = document.head.querySelector('meta[name="csrf-token"]').content;
+
+    const handleAnswerSelection = (questionId, answer) => {
+        setData((prev) => ({
+            ...prev,
+            idPertanyaan: questionId,
+            jawaban: answer,
+            idMurid: kerja.idMurid.id,
+        }));
+
+        // Immediately post the data to the backend
+        setTimeout(() => {
+            console.log("Data being sent to the backend:", {
+                idPertanyaan: questionId,
+                jawaban: answer,
+                idMurid: kerja.idMurid.id,
+            });
+
+            post(route("saveAnswer"), {
+                onError: (errors) => {
+                    console.error("Failed to save answer:", errors);
+                },
+            });
+        }, 50);
     };
 
     const handleConfirmFinish = async () => {
@@ -82,26 +111,6 @@ export default function Quest({ kerja, pertanyaan }) {
         }
     };
 
-    // useEffect(() => {
-    //     const handleBlur = () => {
-    //         setViolations((prev) => prev + 1);
-    //         alert('Cheating detected! Stay focused on the exam page.');
-    //     };
-
-    //     window.addEventListener('blur', handleBlur);
-
-    //     return () => {
-    //         window.removeEventListener('blur', handleBlur);
-    //     };
-    // }, []);
-
-    // useEffect(() => {
-    //     if (violations >= 3) {
-    //         alert('You have exceeded the cheating limit. Redirecting to dashboard...');
-    //         window.location.href = route('dashboard');
-    //     }
-    // }, [violations]);
-
     return (
         <AuthenticatedLayout countdown={renderer} duration={remainingTime}>
             <Head title="Ujian Start" />
@@ -117,7 +126,8 @@ export default function Quest({ kerja, pertanyaan }) {
                 <Soal
                     handleAlert={handleAlert}
                     question={pertanyaan.data[currentQuestion]}
-                    onAnswerChange={handleAnswerChange}
+                    onAnswerChange={handleAnswerSelection}
+                    selectedAnswer={pertanyaan.data[currentQuestion]?.jawaban || null}
                 />
                 <div className="mt-5 w-11/12">
                     <div className="w-full">

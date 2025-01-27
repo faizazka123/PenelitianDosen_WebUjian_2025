@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Resources\KerjaResource;
 use App\Http\Resources\PertanyaanCollection;
 use App\Http\Resources\PertanyaanResource;
 use App\Models\Kerja;
 use App\Http\Requests\StoreKerjaRequest;
 use App\Http\Requests\UpdateKerjaRequest;
+use App\Models\KunciJawaban;
 use App\Models\Pertanyaan;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
@@ -36,34 +39,59 @@ class ExamController extends Controller
 
         $pertanyaan = Pertanyaan::where('idUjian', $kerjaResource->idUjian)->get();
         $pertanyaanResource = PertanyaanResource::collection($pertanyaan);
+
+        $answer = KunciJawaban::where('idMurid', auth()->id())
+            ->whereIn('idPertanyaan', $pertanyaan->pluck('id'))
+            ->get()
+            ->pluck('jawaban', 'idPertanyaan');
+
+        // dd($answer);
+
         // dd($pertanyaanResource);
         return Inertia('Exam/Quest', [
             'kerja' => $kerjaResource,
             'pertanyaan' => $pertanyaanResource,
+            'answer' => $answer,
         ]);
     }
 
-    // public function submitExam(Request $request, $id)
-    // {
-    //     $kerja = Kerja::findOrFail($id);
+    public function saveAnswer(StoreAnswerRequest $request)
+    {
+        $validated = $request->validated();
 
-    //     // Process the student's answers
-    //     $answers = $request->input('answers'); // Array of answers from the frontend
-    //     $score = 0;
+        // Save or update the answer in the database
+        $kunciJawaban = KunciJawaban::updateOrCreate(
+            [
+                'idPertanyaan' => $validated['idPertanyaan'],
+                'idMurid' => $validated['idMurid'],
+            ],
+            [
+                'jawaban' => $validated['jawaban'],
+                'is_correct' => null,
+            ]
+        );
+        // try {
+        //     $validated = $request->validate([
+        //         'idPertanyaan' => 'required|integer|exists:pertanyaans,id',
+        //         'jawaban' => 'required|string',
+        //     ]);
 
-    //     foreach ($kerja->idUjian->soals as $soal) {
-    //         if (isset($answers[$soal->id]) && $answers[$soal->id] === $soal->jawaban_benar) {
-    //             $score++;
-    //         }
-    //     }
+        //     $answer = KunciJawaban::updateOrCreate(
+        //         [
+        //             'idPertanyaan' => $validated['idPertanyaan'],
+        //             'idMurid' => auth()->id(),
+        //         ],
+        //         [
+        //             'jawaban' => $validated['jawaban'],
+        //             'is_correct' => null,
+        //         ]
+        //     );
 
-    //     // Save the score and mark the exam as completed
-    //     $kerja->nilai = $score;
-    //     $kerja->status = 'completed';
-    //     $kerja->save();
-
-    //     return redirect()->route('dashboard')->with('success', 'Ujian telah diselesaikan.');
-    // }
+        //     return response()->json(['success' => true, 'answer' => $answer]);
+        // } catch (\Exception $e) {
+        //     return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        // }
+    }
 
     public function submitExam(Request $request, $idKerja)
     {
