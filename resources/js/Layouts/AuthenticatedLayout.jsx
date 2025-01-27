@@ -102,7 +102,7 @@ export default function AuthenticatedLayout({
                             {countdown ? (
                                 <PrimaryButton className="bg-orange ">
                                     <Countdown
-                                        date={Date.now() + duration.current}
+                                        date={Date.now() + duration}
                                         renderer={countdown}
                                     />
                                 </PrimaryButton>
@@ -160,6 +160,7 @@ export default function AuthenticatedLayout({
                         <div className="border-t border-gray-200">
                             <ResponsiveNavLink
                                 href={route("logout")}
+                                method='post'
                                 active={route().current("logout")}
                             >
                                 Logout

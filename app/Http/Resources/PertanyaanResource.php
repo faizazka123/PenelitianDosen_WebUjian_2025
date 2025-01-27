@@ -26,6 +26,7 @@ class PertanyaanResource extends JsonResource
             'pilihan3' => $this->pilihan3,
             'pilihan4' => $this->pilihan4,
             'pilihan5' => $this->pilihan5,
+            'jawaban' => $this->jawaban,
             'image' => $this->image,
         ];
     }

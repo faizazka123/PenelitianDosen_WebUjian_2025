@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'kelas' => random_int(1, 3),
             'password' => Hash::make('password'),
         ]);
-        
+
         User::factory(10)->create();
         Guru::factory(10)->create();
 
@@ -67,44 +67,48 @@ class DatabaseSeeder extends Seeder
         Pertanyaan::factory()->create([
             'idUjian' => 1,
             'pertanyaan' => 'Apa ibu kota Indonesia?',
-            'pilihan1' => 'Jakarta',
+            'pilihan1' => 'Medan',
             'pilihan2' => 'Surabaya',
-            'pilihan3' => 'Bandung',
-            'pilihan4' => 'Medan',
+            'pilihan3' => 'Jakarta',
+            'pilihan4' => 'Bandung',
             'pilihan5' => null,
+            'jawaban' => 3, // Jakarta adalah ibu kota Indonesia
             'image' => null,
         ]);
 
         Pertanyaan::factory()->create([
             'idUjian' => 1,
             'pertanyaan' => 'Siapa presiden pertama Indonesia?',
-            'pilihan1' => 'Soekarno',
-            'pilihan2' => 'Soeharto',
-            'pilihan3' => 'Joko Widodo',
+            'pilihan1' => 'Soeharto',
+            'pilihan2' => 'Joko Widodo',
+            'pilihan3' => 'Soekarno',
             'pilihan4' => 'Bacharuddin Jusuf Habibie',
             'pilihan5' => null,
+            'jawaban' => 3, // Soekarno adalah presiden pertama Indonesia
             'image' => null,
         ]);
 
         Pertanyaan::factory()->create([
             'idUjian' => 1,
             'pertanyaan' => 'Apa lambang negara Indonesia?',
-            'pilihan1' => 'Garuda Pancasila',
-            'pilihan2' => 'Pohon Beringin',
+            'pilihan1' => 'Pohon Beringin',
+            'pilihan2' => 'Garuda Pancasila',
             'pilihan3' => 'Banteng',
             'pilihan4' => 'Burung Cendrawasih',
             'pilihan5' => null,
+            'jawaban' => 2, // Garuda Pancasila adalah lambang negara Indonesia
             'image' => null,
         ]);
 
         Pertanyaan::factory()->create([
             'idUjian' => 1,
             'pertanyaan' => 'Berapa jumlah provinsi di Indonesia?',
-            'pilihan1' => '34',
+            'pilihan1' => '36',
             'pilihan2' => '30',
-            'pilihan3' => '32',
-            'pilihan4' => '36',
+            'pilihan3' => '34',
+            'pilihan4' => '32',
             'pilihan5' => null,
+            'jawaban' => 3, // Jumlah provinsi di Indonesia adalah 34
             'image' => null,
         ]);
 

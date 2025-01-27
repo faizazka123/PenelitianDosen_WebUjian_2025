@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('pilihan3')->nullable();
             $table->text('pilihan4')->nullable();
             $table->text('pilihan5')->nullable();
+            $table->string('jawaban');
             $table->string('image')->nullable();
             $table->timestamps();
         });

@@ -4,7 +4,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ListSoal from "@/Components/ListSoal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Soal from "@/Components/Soal";
-import Countdown from "react-countdown";
 
 export default function Quest({ kerja, pertanyaan }) {
     const [showMenu, setShowMenu] = useState(false);
@@ -61,7 +60,15 @@ export default function Quest({ kerja, pertanyaan }) {
         }
     };
 
-    const remainingTime = useRef(getRemainingTime());
+    const [remainingTime, setRemainingTime] = useState(getRemainingTime());
+
+    useEffect(() => {
+        const timerInterval = setInterval(() => {
+            setRemainingTime(getRemainingTime());
+        }, 1000);
+
+        return () => clearInterval(timerInterval);
+    }, []);
 
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {

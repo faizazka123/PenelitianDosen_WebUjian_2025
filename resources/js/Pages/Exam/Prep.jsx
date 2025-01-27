@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Card from "@/Components/Card";
 import { useEffect } from "react";
 
-export default function Prep({ kerja }) {
+export default function Prep({ kerja, jumlahSoal }) {
 
     useEffect(() => {
         if (localStorage.getItem("examStartTime")) {
@@ -46,7 +46,7 @@ export default function Prep({ kerja }) {
                                 width={20}
                                 alt="soal"
                             />
-                            <p className="font-normal">Jumlah Soal : 5 Soal</p>
+                            <p className="font-normal">Jumlah Soal : {jumlahSoal} Soal</p>
                         </div>
                         <div className="flex flex-row justify-start items-center gap-3 mb-5 text-primary">
                             <img

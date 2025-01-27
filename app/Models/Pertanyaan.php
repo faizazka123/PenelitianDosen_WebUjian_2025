@@ -18,6 +18,7 @@ class Pertanyaan extends Model
         'pilihan3',
         'pilihan4',
         'pilihan5',
+        'jawaban',
         'image',
     ];
 

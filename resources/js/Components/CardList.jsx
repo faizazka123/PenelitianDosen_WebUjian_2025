@@ -39,7 +39,7 @@ const CardList = ({ props }) => {
                         props.isActive ? "bg-primary" : ""
                     } !text-sm px-5 h-[2rem] rounded-xl`}
                 >
-                    Mualai
+                    Mulai
                 </PrimaryButton>
             </Link>
         </div>

@@ -21,9 +21,11 @@ class ExamController extends Controller
         $kerja = Kerja::findOrFail($id);
         $kerjaResource = new KerjaResource($kerja);
 
+        $pertanyaan = Pertanyaan::where('idUjian', $kerjaResource->idUjian)->get();
+
         return Inertia('Exam/Prep', [
             'kerja' => $kerjaResource,
-            // 'jumlahSoal' => $kerja->idUjian->pertanyaan->count(),
+            'jumlahSoal' => $pertanyaan->count()
         ]);
     }
 
