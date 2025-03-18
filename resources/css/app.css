@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.react-quill-container {
+    height: 200px; /* Adjust the height as per your design */
+    overflow-y: auto;
+}
+
+.react-quill-container .ql-editor {
+    white-space: pre-wrap; /* Ensures that text wraps correctly */
+    word-wrap: break-word; /* Handles long words that could overflow */
+    word-break: break-word; /* Prevents long words from breaking the layout */
+    overflow-wrap: break-word; /* Ensures word wrapping in some browsers */
+}

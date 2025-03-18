@@ -79,3 +79,85 @@ export const columnsTabel = () => {
     ];
     return columns;
 };
+
+export const columnsTabel1 = () => {
+    const columns = [
+        {
+            name: "No",
+            selector: (row, index) => index + 1,
+            grow: 0,
+        },
+        {
+            name: "Mata Pelajaran",
+            selector: (row) => row.mapel,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "Jenis",
+            selector: (row) => row.jenis,
+            sortable: true,
+        },
+        {
+            name: "Tahun Ajaran",
+            selector: (row) => row.tahunAjaran,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "Detail Ujian",
+            cell: (row) => {
+                return (
+                    <PrimaryButton className="bg-primary px-10 !py-1 w-full">
+                        Detail
+                    </PrimaryButton>
+                );
+            },
+        },
+        {
+            name: "Detail Nilai",
+            cell: (row) => {
+                return (
+                    <PrimaryButton className="bg-kuning px-10 !py-1 w-full">
+                        Detail
+                    </PrimaryButton>
+                );
+            },
+        },
+    ];
+    return columns;
+};
+
+export const columnsTabel2 = () => {
+    const columns = [
+        {
+            name: "No",
+            selector: (row, index) => index + 1,
+            grow: 0,
+        },
+        {
+            name: "Nama Siswa",
+            selector: (row) => row.nama,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "Nilai",
+            selector: (row) => row.nilai,
+            sortable: true,
+        },
+        {
+            name: "Jumlah Benar",
+            selector: (row) => row.jumlahBenar,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "Jumlah Salah",
+            selector: (row) => row.jumlahSalah,
+            sortable: true,
+            filterable: true,
+        },
+    ];
+    return columns;
+};

@@ -1,7 +1,7 @@
 import DataTable from "react-data-table-component";
-import { columnsTabel } from "@/utils/constants";
+import { columnsTabel, columnsTabel1, columnsTabel2 } from "@/utils/constants";
 
-const DataTableComponent = () => {
+const DataTableComponent = ({ page = "daftarUjian" }) => {
     const customStyles = {
         headCells: {
             style: {
@@ -11,20 +11,55 @@ const DataTableComponent = () => {
             },
         },
     };
-    const columns = columnsTabel();
+    let columns, data;
+    if (page == "daftarUjian") {
+        columns = columnsTabel();
 
-    const data = [
-        {
-            mapel: "Matematika",
-            judulKuis: "Algebra dan Kalkulus",
-            tahunAjaran: "2023/2024",
-        },
-        {
-            mapel: "Fisika",
-            judulKuis: "Fisika Dasar",
-            tahunAjaran: "2022/2023",
-        },
-    ];
+        data = [
+            {
+                mapel: "Matematika",
+                judulKuis: "Algebra dan Kalkulus",
+                tahunAjaran: "2023/2024",
+            },
+            {
+                mapel: "Fisika",
+                judulKuis: "Fisika Dasar",
+                tahunAjaran: "2022/2023",
+            },
+        ];
+    } else if (page == "laporanNilai") {
+        columns = columnsTabel1();
+
+        data = [
+            {
+                mapel: "Matematika",
+                jenis: "Kuis",
+                tahunAjaran: "2023/2024",
+            },
+            {
+                mapel: "Fisika",
+                jenis: "UTS",
+                tahunAjaran: "2022/2023",
+            },
+        ];
+    } else {
+        columns = columnsTabel2();
+
+        data = [
+            {
+                nama: "Siapa",
+                nilai: 90,
+                jumlahBenar: 80,
+                jumlahSalah: 76,
+            },
+            {
+                nama: "Siapa",
+                nilai: 90,
+                jumlahBenar: 80,
+                jumlahSalah: 76,
+            },
+        ];
+    }
 
     return (
         <div className="mt-10 border-1 shadow-xl">

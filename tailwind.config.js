@@ -25,6 +25,7 @@ export default {
                 orange: "#C44601",
                 hijau: "#04CF26",
                 abu: "#EDEDED",
+                abu_tua: "#BCBCBC",
                 biru_muda: "#3FA2F6",
                 biru_tua: "#0F67B1",
             },

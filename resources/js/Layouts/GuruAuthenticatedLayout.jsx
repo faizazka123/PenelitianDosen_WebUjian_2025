@@ -2,6 +2,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import SideNavLink from "@/Components/SideNavLink";
+import { Icon } from "@iconify/react";
 
 const GuruAuthenticatedLayout = ({ header, children }) => {
     const user = usePage().props.auth.user;
@@ -10,8 +11,8 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
 
     return (
         <div className="min-h-screen">
-            <nav className="bg-white">
-                <div className="mx-auto max-w-full ps-8 shadow-xl mb-2">
+            <nav className="bg-white fixed top-0 w-full z-50 shadow-md">
+                <div className="mx-auto max-w-full ps-8 shadow-xl mb-1">
                     <div className="flex h-12 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
@@ -26,67 +27,7 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                                     </p>
                                 </Link>
                             </div>
-
-                            {/* <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    href={route("nilai")}
-                                    active={route().current("nilai")}
-                                >
-                                    Nilai Ujian
-                                </NavLink>
-                            </div> */}
                         </div>
-
-                        {/* <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route("profile.edit")}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route("logout")}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div> */}
 
                         <div className="me-2 flex items-center sm:hidden">
                             <button
@@ -161,48 +102,89 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                 </header>
             )}
 
-            <div className="flex gap-5 min-h-screen">
-                <nav className="w-2/12 flex flex-col gap-1 pt-8 bg-abu">
-                    <div className="flex flex-col gap-10 px-8 h-full">
+            <div className="flex gap-5 min-h-screen mt-[3rem]">
+                <nav className="w-2/12 flex flex-col pt-8 bg-abu fixed h-full">
+                    <div className="flex flex-col gap-3 px-8 flex-grow">
                         <SideNavLink
                             href={route("guru.dashboard")}
                             active={route().current("guru.dashboard")}
                         >
+                            <Icon
+                                icon="material-symbols:dashboard-outline"
+                                width="24"
+                                height="24"
+                                className="me-5"
+                            />
                             Dashboard
                         </SideNavLink>
                         <SideNavLink
                             href={route("nilai")}
                             active={route().current("nilai")}
                         >
+                            <Icon
+                                icon="healthicons:i-exam-multiple-choice-outline"
+                                width="24"
+                                height="24"
+                                className="me-5"
+                            />
                             Nilai Ujian
                         </SideNavLink>
                         <SideNavLink
                             href={route("nilai")}
                             active={route().current("nilai")}
                         >
-                            Nilai Ujian
+                            <Icon
+                                icon="material-symbols:subject"
+                                width="24"
+                                height="24"
+                                className="me-5"
+                            />
+                            Daftar Ujian
                         </SideNavLink>
                         <SideNavLink
                             href={route("nilai")}
                             active={route().current("nilai")}
                         >
-                            Nilai Ujian
+                            <Icon
+                                icon="ph:exam-thin"
+                                width="24"
+                                height="24"
+                                className="me-5"
+                            />
+                            Laporan Nilai
+                        </SideNavLink>
+                        <SideNavLink
+                            href={route("nilai")}
+                            active={route().current("nilai")}
+                        >
+                            <Icon
+                                icon="mdi:notifications-none"
+                                width="24"
+                                height="24"
+                                className="me-5"
+                            />
+                            Notifikasi
                         </SideNavLink>
                     </div>
-                    <div className="px-8 mt-auto bg-abu">
+                    <div className="px-8 mb-[8rem]">
                         <SideNavLink
                             href={route("logout")}
                             method="post"
                             as="button"
-                            className="mb-10"
                         >
+                            <Icon
+                                icon="material-symbols:logout"
+                                width="24"
+                                height="24"
+                                className="me-5"
+                            />
                             Logout
                         </SideNavLink>
                     </div>
                 </nav>
                 <main
-                    className={`${
-                        showingNavigationDropdown ? "blur-sm " : " "
+                    className={`ml-[16.6%] ${
+                        showingNavigationDropdown ? "blur-sm " : ""
                     } w-9/12 p-10`}
                 >
                     <div className="flex items-center gap-3 font-bold mb-4">

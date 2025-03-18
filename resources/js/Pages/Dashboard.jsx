@@ -2,6 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import KodeInputForm from "@/Components/KodeInputForm";
 import { Head, usePage } from "@inertiajs/react";
 import Card from "@/Components/Card";
+import CardList from "@/Components/CardList";
 
 export default function Dashboard(kerjas) {
     const { flash } = usePage().props;
