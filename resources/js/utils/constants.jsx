@@ -161,3 +161,105 @@ export const columnsTabel2 = () => {
     ];
     return columns;
 };
+
+export const columnsTabel3 = () => {
+    const columns = [
+        {
+            name: "No",
+            selector: (row, index) => index + 1,
+            grow: 0,
+        },
+        {
+            name: "Nama",
+            selector: (row) => row.nama,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "NIP",
+            selector: (row) => row.nip,
+            sortable: true,
+        },
+        {
+            name: "Password",
+            selector: (row) => row.password,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "Aksi",
+            cell: (row) => {
+                return (
+                    <div className="flex gap-5">
+                        <Link>
+                            <img
+                                src={`${window.LARAVEL_URL}/material_edit.png`}
+                                width={25}
+                            />
+                        </Link>
+                        <Link>
+                            <img
+                                src={`${window.LARAVEL_URL}/material_delete.png`}
+                                width={25}
+                            />
+                        </Link>
+                    </div>
+                );
+            },
+        },
+    ];
+    return columns;
+};
+export const columnsTabel4 = () => {
+    const columns = [
+        {
+            name: "No",
+            selector: (row, index) => index + 1,
+            grow: 0,
+        },
+        {
+            name: "Nama",
+            selector: (row) => row.nama,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "NIS",
+            selector: (row) => row.nis,
+            sortable: true,
+        },
+        {
+            name: "Kelas",
+            selector: (row) => row.kelas,
+            sortable: true,
+        },
+        {
+            name: "Password",
+            selector: (row) => row.password,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: "Aksi",
+            cell: (row) => {
+                return (
+                    <div className="flex gap-5">
+                        <Link>
+                            <img
+                                src={`${window.LARAVEL_URL}/material_edit.png`}
+                                width={25}
+                            />
+                        </Link>
+                        <Link>
+                            <img
+                                src={`${window.LARAVEL_URL}/material_delete.png`}
+                                width={25}
+                            />
+                        </Link>
+                    </div>
+                );
+            },
+        },
+    ];
+    return columns;
+};

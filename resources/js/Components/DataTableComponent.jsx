@@ -1,5 +1,11 @@
 import DataTable from "react-data-table-component";
-import { columnsTabel, columnsTabel1, columnsTabel2 } from "@/utils/constants";
+import {
+    columnsTabel,
+    columnsTabel1,
+    columnsTabel2,
+    columnsTabel3,
+    columnsTabel4,
+} from "@/utils/constants";
 
 const DataTableComponent = ({ page = "daftarUjian" }) => {
     const customStyles = {
@@ -40,6 +46,38 @@ const DataTableComponent = ({ page = "daftarUjian" }) => {
                 mapel: "Fisika",
                 jenis: "UTS",
                 tahunAjaran: "2022/2023",
+            },
+        ];
+    } else if (page == "adminGuru") {
+        columns = columnsTabel3();
+
+        data = [
+            {
+                nama: "Dharma",
+                nip: "22424323",
+                password: "apaya",
+            },
+            {
+                nama: "apa",
+                nip: "341231",
+                password: "apayaaa",
+            },
+        ];
+    } else if (page == "adminSiswa") {
+        columns = columnsTabel4();
+
+        data = [
+            {
+                nama: "Dharma",
+                nis: "22424323",
+                kelas: "3TIF",
+                password: "apaya",
+            },
+            {
+                nama: "apa",
+                nis: "341231",
+                kelas: "3TIF",
+                password: "apayaaa",
             },
         ];
     } else {
