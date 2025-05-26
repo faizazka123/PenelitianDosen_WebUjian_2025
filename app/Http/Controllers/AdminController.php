@@ -19,8 +19,15 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $jumlahGuru = Guru::count();
         $jumlahSiswa = User::count();
 
@@ -32,6 +39,12 @@ class AdminController extends Controller
 
     public function viewDataGuru()
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $query = Guru::query();
         $gurus = $query->orderBy('created_at', 'desc')->get();
         return inertia('Admin/Guru/DataGuru', [
@@ -42,6 +55,12 @@ class AdminController extends Controller
 
     public function viewDataSiswa()
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $query = User::query();
         $murids = $query->orderBy('created_at', 'desc')->get();
         return Inertia('Admin/Murid/DataSiswa', [
@@ -52,16 +71,34 @@ class AdminController extends Controller
 
     public function tambahSiswa()
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         return Inertia('Admin/Murid/TambahSiswa');
     }
 
     public function tambahGuru()
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         return Inertia('Admin/Guru/TambahGuru');
     }
 
     public function guruStore(StoreGuruRequest $request)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $data = $request->validated();
         unset($data['konfirmasiPassword']);
 
@@ -74,6 +111,12 @@ class AdminController extends Controller
 
     public function importGuru(Request $request)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $guruList = $request->input('guruList');
 
         foreach ($guruList as $guru) {
@@ -90,6 +133,12 @@ class AdminController extends Controller
 
     public function siswaStore(StoreSiswaRequest $request)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $data = $request->validated();
         unset($data['konfirmasiPassword']);
 
@@ -102,6 +151,12 @@ class AdminController extends Controller
 
     public function importSiswa(Request $request)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $siswaList = $request->input('siswaList');
 
         foreach ($siswaList as $siswa) {
@@ -119,6 +174,12 @@ class AdminController extends Controller
 
     public function guruHapus($nip)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         Guru::where('NIP', $nip)->delete();
 
         return to_route('guru.dataGuru')
@@ -135,6 +196,12 @@ class AdminController extends Controller
 
     public function guruEdit($nip)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $guru = Guru::where('NIP', $nip)->firstOrFail();
 
         return inertia('Admin/Guru/EditGuru', [
@@ -144,6 +211,12 @@ class AdminController extends Controller
 
     public function siswaEdit($id)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $siswa = User::where('id', $id)->firstOrFail();
 
         return inertia('Admin/Murid/EditSiswa', [
@@ -153,6 +226,12 @@ class AdminController extends Controller
 
     public function guruUpdate(UpdateGuruRequest $request, $NIP)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $guru = Guru::where('NIP', $NIP)->firstOrFail();
         $data = $request->validated();
 
@@ -177,6 +256,12 @@ class AdminController extends Controller
 
     public function siswaUpdate(UpdateSiswaRequest $request, $id)
     {
+        $guru = auth()->guard('guru')->user();
+
+        if (!$guru->is_admin) {
+            return redirect()->route('guru.dashboard');
+        }
+
         $siswa = User::where('id', $id)->firstOrFail();
 
         $data = $request->validated();
@@ -197,53 +282,5 @@ class AdminController extends Controller
         // dd($guru);
 
         return to_route('guru.dataSiswa')->with('success', 'Siswa berhasil diedit');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

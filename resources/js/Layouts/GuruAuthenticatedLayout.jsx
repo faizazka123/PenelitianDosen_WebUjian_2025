@@ -175,8 +175,8 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                 >
                     <div className="flex items-center gap-3 font-bold mb-4">
                         <img src={`${LARAVEL_URL}/profileGuru.png`} />
-                        {/* Selamat Datang, {user.nama}! */}
-                        Selamat Datang, Christelle Rempel!
+                        Selamat Datang, {user.nama}!
+                        {/* Selamat Datang, Christelle Rempel! */}
                     </div>
                     {children}
                 </main>

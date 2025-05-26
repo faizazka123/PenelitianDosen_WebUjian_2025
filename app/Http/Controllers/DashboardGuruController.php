@@ -26,9 +26,8 @@ class DashboardGuruController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id(); // Get the ID of the currently authenticated user
-        $query = Ujian::query();
-        $ujians = $query->orderBy('created_at', 'desc')->paginate(5);
+        $guru = auth()->guard('guru')->user();
+        $ujians = Ujian::where('NIP', $guru->NIP)->orderBy('created_at', 'desc')->paginate(5);
         return Inertia('Guru/DashboardGuru', [
             'ujians' => ExamResource::collection($ujians),
         ]);
@@ -36,9 +35,8 @@ class DashboardGuruController extends Controller
 
     public function nilai()
     {
-        $userId = Auth::id(); // Get the ID of the currently authenticated user
-        $query = Ujian::query();
-        $ujians = $query->orderBy('created_at', 'desc')->paginate(5);
+        $guru = auth()->guard('guru')->user();
+        $ujians = Ujian::where('NIP', $guru->NIP)->orderBy('created_at', 'desc')->paginate(5);
         return Inertia('Guru/Nilai', [
             'ujians' => ExamResource::collection($ujians),
         ]);
@@ -65,9 +63,8 @@ class DashboardGuruController extends Controller
 
     public function ujian()
     {
-        $userId = Auth::id(); // Get the ID of the currently authenticated user
-        $query = Ujian::query();
-        $ujians = $query->orderBy('created_at', 'desc')->paginate(10);
+        $guru = auth()->guard('guru')->user();
+        $ujians = Ujian::where('NIP', $guru->NIP)->orderBy('created_at', 'desc')->paginate(10);
         return Inertia('Guru/DaftarUjian', [
             'ujians' => ExamResource::collection($ujians),
         ]);
@@ -92,7 +89,9 @@ class DashboardGuruController extends Controller
 
         $data['durasi'] = $durasi;
 
-        $data['NIP'] = 54321;
+        $guru = auth()->guard('guru')->user();
+
+        $data['NIP'] = $guru->NIP;
 
         Ujian::create($data);
 
@@ -122,7 +121,9 @@ class DashboardGuruController extends Controller
 
         $data['durasi'] = $durasi;
 
-        $data['NIP'] = 54321;
+        $guru = auth()->guard('guru')->user();
+
+        $data['NIP'] = $guru->NIP;
 
         $ujian = Ujian::findOrFail($id);
         $ujian->update($data);
