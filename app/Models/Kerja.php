@@ -18,6 +18,8 @@ class Kerja extends Model
         'isActive',
         'countKecurangan',
         'nilai',
+        'jawaban_benar',
+        'jawaban_salah',
     ];
 
     public function murid()
@@ -30,8 +32,9 @@ class Kerja extends Model
         return $this->belongsTo(Ujian::class, 'idUjian');
     }
 
-    public function studentAnswers()
+    public function jawaban_siswa()
     {
-        return $this->hasMany(KunciJawaban::class, 'idKerja');
+        return $this->hasMany(jawaban_siswa::class, 'kerja_id');
     }
+
 }

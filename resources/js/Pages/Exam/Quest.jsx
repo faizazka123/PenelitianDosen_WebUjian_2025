@@ -1,22 +1,89 @@
-import { Head, useForm, usePage } from "@inertiajs/react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { useState, useEffect, useRef } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ListSoal from "@/Components/ListSoal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Soal from "@/Components/Soal";
+import Swal from "sweetalert2";
 
-export default function Quest({ kerja, pertanyaan, answers: initialAnswers }) {
+export default function Quest({ kerja, pertanyaan }) {
+    const { jawabanSiswa } = usePage().props;
+
+    const convertToMap = (array) => {
+        const map = {};
+        array.forEach(item => {
+            map[item.pertanyaan_id] = item.jawaban_id;
+        });
+        return map;
+    };
+
+    const [answers, setAnswers] = useState(() => convertToMap(jawabanSiswa || []));
+
     const [showMenu, setShowMenu] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
-    const [answers, setAnswers] = useState(initialAnswers || {});
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const { data, setData, post, processing, errors } = useForm({
-        idPertanyaan: "",
-        idMurid: "",
-        jawaban: "",
-    });
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    console.log
+    const currentSoal = pertanyaan.data[currentIndex];
+
+
+    console.log(kerja.idUjian.durasi)
+
+    // ~~~Timer
+    const durasiStr = kerja.idUjian.durasi;
+
+    const durasiKeDetik = (durasiStr) => {
+        const [jam, menit, detik] = durasiStr.split(':').map(Number);
+        return jam * 3600 + menit * 60 + detik;
+    };
+
+    const durasiDetik = durasiKeDetik(durasiStr);
+
+    const key = `ujian_endtime_${kerja.idKerja}`;
+    const now = Date.now();
+    let endTime = localStorage.getItem(key);
+
+    if (!endTime) {
+        endTime = now + durasiDetik * 1000;
+        localStorage.setItem(key, endTime);
+    } else {
+        endTime = parseInt(endTime);
+    }
+
+
+    const handleSelectAnswer = (pertanyaanId, jawabanId) => {
+        // Update state lokal
+        setAnswers(prev => ({
+            ...prev,
+            [pertanyaanId]: jawabanId
+        }));
+
+        // Kirim ke server
+        router.post(route('jawaban.simpan', kerja.idKerja), {
+            pertanyaan_id: pertanyaanId,
+            jawaban_id: jawabanId,
+        }, {
+            preserveScroll: true,
+            onError: (e) => console.error("Gagal simpan:", e),
+        });
+    };
+
+
+    const handleNext = () => {
+        if (currentIndex < pertanyaan.data.length - 1) {
+            setCurrentIndex((prev) => prev + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex((prev) => prev - 1);
+        }
+    };
+
+    const handleSelectSoal = (index) => {
+        setCurrentIndex(index);
+        setShowMenu(false);
+    };
 
     const handleToggleMenu = () => {
         setShowMenu(!showMenu);
@@ -30,89 +97,109 @@ export default function Quest({ kerja, pertanyaan, answers: initialAnswers }) {
         setShowAlert(false);
     };
 
-    const token = document.head.querySelector('meta[name="csrf-token"]').content;
-
-    const handleAnswerSelection = (questionId, answer) => {
-        setData((prev) => ({
-            ...prev,
-            idPertanyaan: questionId,
-            jawaban: answer,
-            idMurid: kerja.idMurid.id,
-        }));
-
-        // Immediately post the data to the backend
-        setTimeout(() => {
-            console.log("Data being sent to the backend:", {
-                idPertanyaan: questionId,
-                jawaban: answer,
-                idMurid: kerja.idMurid.id,
-            });
-
-            post(route("saveAnswer"), {
-                onError: (errors) => {
-                    console.error("Failed to save answer:", errors);
-                },
-            });
-        }, 50);
-    };
-
-    const handleConfirmFinish = async () => {
-        // Submit answers to the server
-        await fetch(route("kerjas.submit", { id: kerja.idKerja }), {
-            method: "POST",
-            body: JSON.stringify(answers),
-            headers: { "Content-Type": "application/json" },
+    const handleConfirmFinish = () => {
+        router.post(route('ujian.selesai', kerja.idKerja), {}, {
+            onSuccess: () => {
+                localStorage.removeItem(key);
+                console.log("Ujian diselesaikan.");
+            },
+            onError: () => {
+                alert("Terjadi kesalahan saat menyelesaikan ujian.");
+            }
         });
-        alert("Exam submitted!");
-        window.location.href = route("dashboard");
     };
 
-    const parseDurationToMilliseconds = (duration) => {
-        const [hours, minutes, seconds] = duration.split(":").map(Number);
-        return (hours * 3600 + minutes * 60 + seconds) * 1000;
+    const handleFinish = () => {
+        router.post(route('ujian.selesai', kerja.idKerja), {}, {
+            onSuccess: () => {
+                localStorage.removeItem(key);
+                console.log("Ujian otomatis diselesaikan.");
+            },
+            onError: () => {
+                alert("Terjadi kesalahan saat menyelesaikan ujian.");
+            }
+        });
     };
-
-    const durationInMilliseconds = useRef(parseDurationToMilliseconds(kerja.idUjian.durasi));
-
-    // Calculate the remaining time on page load
-    const getRemainingTime = () => {
-        const storedStartTime = localStorage.getItem("examStartTime");
-        if (storedStartTime) {
-            const startTime = parseInt(storedStartTime, 10);
-            const currentTime = Date.now();
-            const timeElapsed = currentTime - startTime;
-            return Math.max(durationInMilliseconds.current - timeElapsed, 0); // Prevent negative time
-        } else {
-            // If no start time exists, it's the first time the user is loading the page, so set the start time now.
-            localStorage.setItem("examStartTime", Date.now().toString());
-            return durationInMilliseconds.current; // Full duration
-        }
-    };
-
-    const [remainingTime, setRemainingTime] = useState(getRemainingTime());
-
-    useEffect(() => {
-        const timerInterval = setInterval(() => {
-            setRemainingTime(getRemainingTime());
-        }, 1000);
-
-        return () => clearInterval(timerInterval);
-    }, []);
 
     const renderer = ({ hours, minutes, seconds, completed }) => {
         if (completed) {
-            handleConfirmFinish();
-        } else {
-            return (
-                <span>
-                    {hours}:{minutes}:{seconds}
-                </span>
-            );
+            handleFinish();
+            return <span>Waktu Habis</span>;
         }
+
+        return (
+            <span className="text-white">
+                {hours.toString().padStart(2, '0')}:
+                {minutes.toString().padStart(2, '0')}:
+                {seconds.toString().padStart(2, '0')}
+            </span>
+        );
     };
 
+    useEffect(() => {
+        const blockBack = () => {
+            window.history.pushState(null, null, window.location.href);
+        };
+
+        // Tambah history state secara berulang
+        blockBack();
+        window.addEventListener("popstate", blockBack);
+
+        return () => {
+            window.removeEventListener("popstate", blockBack);
+        };
+    }, []);
+
+    // ~~~Logic Cheating
+
+    const [violations, setViolations] = useState(0);
+
+    useEffect(() => {
+        const handleBlur = () => {
+            setViolations((prev) => {
+                const updated = prev + 1;
+
+                if (updated < 2) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian!',
+                        text: 'Anda terdeteksi meninggalkan halaman ujian!',
+                        confirmButtonText: 'Saya mengerti',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+
+                return updated;
+            });
+        };
+
+        window.addEventListener("blur", handleBlur);
+
+        return () => {
+            window.removeEventListener("blur", handleBlur);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (violations >= 2) {
+            router.post(route('ujian.caught', kerja.idKerja), {}, {
+                onSuccess: () => {
+                    localStorage.removeItem(key);
+                    console.log("Ujian diselesaikan.");
+                },
+                onError: () => {
+                    alert("Terjadi kesalahan saat menyelesaikan ujian.");
+                }
+            });
+        }
+    }, [violations]); // Jalankan efek setiap kali violations berubah
+
     return (
-        <AuthenticatedLayout countdown={renderer} duration={remainingTime}>
+        <AuthenticatedLayout
+            title={kerja.idUjian.judul}
+            duration={endTime - now}
+            countdown={renderer}
+        >
             <Head title="Ujian Start" />
             <div className=" bg-gray-200 min-h-screen flex flex-col items-center">
                 <div className="py-8 me-10 w-full flex justify-end">
@@ -124,11 +211,22 @@ export default function Quest({ kerja, pertanyaan, answers: initialAnswers }) {
                     </PrimaryButton>
                 </div>
                 <Soal
-                    handleAlert={handleAlert}
-                    question={pertanyaan.data[currentQuestion]}
-                    onAnswerChange={handleAnswerSelection}
-                    selectedAnswer={pertanyaan.data[currentQuestion]?.jawaban || null}
+                    nomor={currentIndex + 1}
+                    soal={{
+                        ...currentSoal,
+                        selectedAnswer: answers[currentSoal.idPertanyaan] || null,
+                    }}
+                    kerjaId={kerja.idKerja}
+                    onNext={handleNext}
+                    onPrev={handlePrev}
+                    showPrev={currentIndex > 0}
+                    showNext={currentIndex < pertanyaan.data.length - 1}
+                    handleSelectAnswer={(jawabanId) =>
+                        handleSelectAnswer(currentSoal.idPertanyaan, jawabanId)
+                    }
+
                 />
+                {/* <Soal/> */}
                 <div className="mt-5 w-11/12">
                     <div className="w-full">
                         <PrimaryButton
@@ -143,14 +241,15 @@ export default function Quest({ kerja, pertanyaan, answers: initialAnswers }) {
             {showMenu && <ListSoal
                 handleToggleMenu={handleToggleMenu}
                 questions={pertanyaan}
-                onQuestionSelect={setCurrentQuestion}
+                currentIndex={currentIndex}
+                onQuestionSelect={handleSelectSoal}
             />}
 
             {showAlert && (
                 <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white max-w-lg w-5/6 p-5 rounded-lg shadow-lg flex flex-col items-center">
                         <img
-                            src="warning.png"
+                            src="/warning.png"
                             className="text-lg font-bold mb-7 mt-5"
                             width={100}
                         ></img>

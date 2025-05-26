@@ -15,7 +15,7 @@ class DashboardSiswaController extends Controller
     {
         $userId = Auth::id(); // Get the ID of the currently authenticated user
         $query = Kerja::query();
-        $kerjas = $query->where('idMurid', $userId)->paginate(10);
+        $kerjas = $query->where('idMurid', $userId)->orderBy('created_at', 'desc')->paginate(10);
         return Inertia('Dashboard', [
             'kerjas' => KerjaResource::collection($kerjas),
         ]);

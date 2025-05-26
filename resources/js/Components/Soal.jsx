@@ -1,62 +1,63 @@
 import PrimaryButton from "./PrimaryButton";
-const Soal = ({ question, onAnswerChange, selectedAnswer }) => {
+const Soal = ({ nomor, soal, onNext, onPrev, showNext, showPrev, handleSelectAnswer }) => {
 
-    const handleChange = (answer) => {
-        onAnswerChange(question.idPertanyaan, answer);
-    };
-
-    console.log(selectedAnswer)
-
-    const options = [
-        question.pilihan1,
-        question.pilihan2,
-        question.pilihan3,
-        question.pilihan4,
-        question.pilihan5,
-    ];
     return (
         <div className="max-w-lg w-11/12 bg-white border border-gray-200 rounded-lg shadow">
             <div className=" py-5 px-5">
                 <span className="text-md font-bold bg-primary text-white px-4 rounded-full py-2">
-                    {question.idPertanyaan}
+                    {/* Nomor Soal */}
+                    {nomor}
                 </span>
             </div>
             <div className="p-5">
-                <p className="mb-3 select-none ">
-                    {question.pertanyaan}
+                <p className="mb-3 select-none " dangerouslySetInnerHTML={{ __html: soal.pertanyaan }}>
+
+                    {/* Pertanyaan */}
+                    {/* {soal.pertanyaan} */}
                 </p>
-                <div className="border border-black rounded-xl">
-                    {options.map((option, index) => (
-                        option ? (
-                            <div
-                                className="flex items-center ps-4 rounded dark:border-gray-700"
-                                key={index}
-                            >
-                                <input
-                                    id={`option-${index}`}
-                                    type="radio"
-                                    name={`question-${question.idPertanyaan}`}
-                                    value={option}
-                                    // checked={selectedAnswer === option}
-                                    onChange={() => handleChange(option)}
-                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                />
-                                <label
-                                    htmlFor={`option-${index}`}
-                                    className="w-full select-none py-4 ms-2 text-sm text-gray-900 dark:text-gray-300"
-                                >
-                                    {option}
-                                </label>
-                            </div>
-                        ) : null
-                    ))}
+                <div className="mb-3">
+                    <img src={`http://127.0.0.1:8000/storage/${soal.image}`} alt="" />
                 </div>
-                <div className="flex justify-end mt-5 gap-16">
-                    <a href="#" className="w-1/2">
-                        <PrimaryButton className="bg-primary !rounded-lg border-2 border-white text-white !py-[0.75rem] w-full">
-                            Selanjutnya
-                        </PrimaryButton>
-                    </a>
+                <div className="border border-black rounded-xl">
+
+                    {/* Jawaban */}
+                    {soal.jawabans.map((jawaban, index) => (
+                        <div key={index} className="flex items-center ps-4 rounded dark:border-gray-700">
+                            {/* {console.log(jawaban.id)} */}
+                            <input
+                                type="radio"
+                                name={`soal-${nomor}`}
+                                value={jawaban.id}
+                                checked={soal.selectedAnswer === jawaban.id}
+                                onChange={() => handleSelectAnswer(jawaban.id)}
+                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                            />
+                            <div className="flex flex-col ms-3">
+                                <label className={`w-full select-none ${jawaban.image ? "pt-4 pb-2" : "py-4"} ms-2 text-sm text-gray-900 dark:text-gray-300`} dangerouslySetInnerHTML={{ __html: jawaban.text }}>
+                                    {/* {jawaban.text} */}
+                                </label>
+                                <img className="lg:max-w-64" src={`http://127.0.0.1:8000/storage/${jawaban.image}`} alt="" />
+
+                            </div>
+                        </div>
+                    ))}
+
+                </div>
+                <div className="flex justify-end mt-5 gap-5">
+                    {showPrev && (
+                        <a className="w-1/2" onClick={onPrev}>
+                            <PrimaryButton className="bg-primary !rounded-lg border-2 border-white text-white !py-[0.75rem] w-full">
+                                Sebelumnya
+                            </PrimaryButton>
+                        </a>
+                    )}
+                    {showNext && (
+                        <a className="w-1/2" onClick={onNext}>
+                            <PrimaryButton className="bg-primary !rounded-lg border-2 border-white text-white !py-[0.75rem] w-full">
+                                Selanjutnya
+                            </PrimaryButton>
+                        </a>
+                    )}
                 </div>
             </div>
         </div>

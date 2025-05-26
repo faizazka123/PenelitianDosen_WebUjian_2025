@@ -6,11 +6,17 @@ use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Resources\KerjaResource;
 use App\Http\Resources\PertanyaanCollection;
 use App\Http\Resources\PertanyaanResource;
+use App\Models\Jawaban;
+use App\Models\jawaban_siswa;
 use App\Models\Kerja;
 use App\Http\Requests\StoreKerjaRequest;
 use App\Http\Requests\UpdateKerjaRequest;
 use App\Models\KunciJawaban;
+use App\Models\MataPelajaran;
+use App\Models\Notifikasi;
 use App\Models\Pertanyaan;
+use App\Models\Ujian;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -22,100 +28,178 @@ class ExamController extends Controller
     public function prep($id)
     {
         $kerja = Kerja::findOrFail($id);
-        $kerjaResource = new KerjaResource($kerja);
 
-        $pertanyaan = Pertanyaan::where('idUjian', $kerjaResource->idUjian)->get();
+        if ($kerja->isActive === 0) {
+            abort(403, 'Anda tidak bisa mengakses halaman ujian secara langsung.');
+        }
+
+        $pertanyaan = Pertanyaan::where('ujian_id', $kerja->idUjian)->get();
 
         return Inertia('Exam/Prep', [
-            'kerja' => $kerjaResource,
+            'kerja' => new KerjaResource($kerja),
             'jumlahSoal' => $pertanyaan->count()
         ]);
+    }
+
+    public function start(Request $request, $id)
+    {
+        $kerja = Kerja::findOrFail($id);
+
+        if ($kerja->idMurid !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!$kerja->random_pertanyaan) {
+            $pertanyaanIds = Pertanyaan::where('ujian_id', $kerja->idUjian)->pluck('id')->shuffle()->toArray();
+            $kerja->random_pertanyaan = json_encode($pertanyaanIds);
+            $kerja->save();
+        }
+
+        session(['ujian_dimulai_' . $kerja->idKerja => true]);
+
+        return redirect()->route('kerjas.soal', ['id' => $kerja->idKerja]);
     }
 
     public function startExam($id)
     {
         $kerja = Kerja::findOrFail($id);
-        $kerjaResource = new KerjaResource($kerja);
 
-        $pertanyaan = Pertanyaan::where('idUjian', $kerjaResource->idUjian)->get();
-        $pertanyaanResource = PertanyaanResource::collection($pertanyaan);
+        if (!session()->has('ujian_dimulai_' . $kerja->idKerja)) {
+            abort(403, 'Anda tidak bisa mengakses halaman ujian secara langsung.');
+        }
 
-        $answer = KunciJawaban::where('idMurid', auth()->id())
-            ->whereIn('idPertanyaan', $pertanyaan->pluck('id'))
-            ->get()
-            ->pluck('jawaban', 'idPertanyaan');
+        if ($kerja->idMurid !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
 
-        // dd($answer);
+        $orderedIds = json_decode($kerja->random_pertanyaan, true);
+        $pertanyaan = collect($orderedIds)->map(function ($id) {
+            return new PertanyaanResource(Pertanyaan::find($id));
+        });
 
-        // dd($pertanyaanResource);
+        $jawabanSiswa = jawaban_siswa::where('kerja_id', $kerja->idKerja)->get();
+
+
         return Inertia('Exam/Quest', [
-            'kerja' => $kerjaResource,
-            'pertanyaan' => $pertanyaanResource,
-            'answer' => $answer,
+            'kerja' => new KerjaResource($kerja),
+            'pertanyaan' => PertanyaanResource::collection($pertanyaan),
+            'jawabanSiswa' => $jawabanSiswa,
         ]);
     }
 
-    public function saveAnswer(StoreAnswerRequest $request)
+    public function simpanJawaban(Request $request, $kerjaId)
     {
-        $validated = $request->validated();
 
-        // Save or update the answer in the database
-        $kunciJawaban = KunciJawaban::updateOrCreate(
+        $kerja = Kerja::findOrFail($kerjaId);
+
+        if (!session()->has('ujian_dimulai_' . $kerja->idKerja)) {
+            abort(403, 'Anda tidak bisa mengakses halaman ujian secara langsung.');
+        }
+
+        if ($kerja->idMurid !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        Log::info('Data request masuk:', $request->all());
+
+
+        $request->validate([
+            'pertanyaan_id' => 'required|exists:pertanyaans,id',
+            'jawaban_id' => 'required|exists:jawabans,id',
+        ]);
+
+        jawaban_siswa::updateOrCreate(
             [
-                'idPertanyaan' => $validated['idPertanyaan'],
-                'idMurid' => $validated['idMurid'],
+                'kerja_id' => $kerjaId,
+                'pertanyaan_id' => $request->pertanyaan_id
             ],
             [
-                'jawaban' => $validated['jawaban'],
-                'is_correct' => null,
+                'jawaban_id' => $request->jawaban_id
             ]
         );
-        // try {
-        //     $validated = $request->validate([
-        //         'idPertanyaan' => 'required|integer|exists:pertanyaans,id',
-        //         'jawaban' => 'required|string',
-        //     ]);
-
-        //     $answer = KunciJawaban::updateOrCreate(
-        //         [
-        //             'idPertanyaan' => $validated['idPertanyaan'],
-        //             'idMurid' => auth()->id(),
-        //         ],
-        //         [
-        //             'jawaban' => $validated['jawaban'],
-        //             'is_correct' => null,
-        //         ]
-        //     );
-
-        //     return response()->json(['success' => true, 'answer' => $answer]);
-        // } catch (\Exception $e) {
-        //     return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
-        // }
     }
 
-    public function submitExam(Request $request, $idKerja)
+    public function selesaikanUjian(Kerja $kerja)
     {
-        $kerja = Kerja::with('idUjian.soal')->findOrFail($idKerja);
+        if (!session()->has('ujian_dimulai_' . $kerja->idKerja)) {
+            abort(403, 'Anda tidak bisa mengakses halaman ujian secara langsung.');
+        }
 
-        $validated = $request->validate([
-            'answers' => 'required|array',
-            'answers.*' => 'integer', // Assuming answers are IDs
-        ]);
+        $jawabanSiswas = jawaban_siswa::where('kerja_id', $kerja->idKerja)->get();
 
-        // Compare answers
-        $correctAnswers = $kerja->idUjian->soal->pluck('correct_option');
-        $submittedAnswers = collect($validated['answers']);
-        $score = $submittedAnswers->intersect($correctAnswers)->count();
+        $totalSoal = Pertanyaan::where('ujian_id', $kerja->idUjian)->get()->count();
+        $jumlahBenar = 0;
 
-        // Save result
-        $kerja->update([
-            'score' => $score,
-            'status' => 'completed',
-        ]);
+        foreach ($jawabanSiswas as $jawabanSiswa) {
+            $jawaban = Jawaban::find($jawabanSiswa->jawaban_id);
+            $isCorrect = $jawaban?->jawaban_benar ?? false;
 
-        return redirect()->route('dashboard')->with('success', 'Exam completed successfully!');
+            $jawabanSiswa->is_correct = $isCorrect;
+            $jawabanSiswa->save();
+
+            if ($isCorrect) {
+                $jumlahBenar++;
+            }
+        }
+
+
+        $nilai = $totalSoal > 0 ? intval(($jumlahBenar / $totalSoal) * 100) : 0;
+
+        $kerja->jawaban_benar = $jumlahBenar;
+
+        $kerja->jawaban_salah = $totalSoal - $jumlahBenar;
+
+        $kerja->isActive = 0;
+        $kerja->nilai = $nilai;
+
+        $kerja->save();
+
+        $murid = User::where('id', $kerja->idMurid)->first('nama');
+        $ujian = Ujian::where('id', $kerja->idUjian)->first(['judul', 'idMapel']);
+        $mapel = MataPelajaran::where('idMapel', $ujian->idMapel)->first('nama');
+
+        $namaMurid = $murid->nama;
+        $judulUjian = $ujian->judul;
+        $namaMapel = $mapel->nama;
+
+        $notif['content'] = "$namaMurid menyelesaikan $judulUjian $namaMapel.";
+        $notif['status'] = 1;
+
+        Notifikasi::create($notif);
+
+        session()->forget('ujian_dimulai_' . $kerja->idKerja);
+
+        return redirect()->route('dashboard')->with('success', 'Ujian berhasil diselesaikan.');
     }
 
+    public function caught(Kerja $kerja)
+    {
+        if (!session()->has('ujian_dimulai_' . $kerja->idKerja)) {
+            abort(403, 'Anda tidak bisa mengakses halaman ujian secara langsung.');
+        }
 
+        $totalSoal = Pertanyaan::where('ujian_id', $kerja->idUjian)->get()->count();
 
+        $murid = User::where('id', $kerja->idMurid)->first('nama');
+
+        $kerja->jawaban_benar = 0;
+
+        $kerja->jawaban_salah = $totalSoal;
+
+        $kerja->isActive = 0;
+
+        $kerja->nilai = 0;
+
+        $kerja->save();
+
+        $namaMurid = $murid->nama;
+        $notif['content'] = "$namaMurid melakukan tindakan kecurangan.";
+        $notif['status'] = 0;
+
+        Notifikasi::create($notif);
+
+        session()->forget('ujian_dimulai_' . $kerja->idKerja);
+
+        return redirect()->route('dashboard')->with('error', 'Anda dikeluarkan dari halaman ujian karena curang.');
+    }
 }

@@ -2,7 +2,6 @@ import PrimaryButton from "./PrimaryButton";
 import { Link } from "@inertiajs/react";
 
 const CardList = ({ props }) => {
-    console.log(props);
     return (
         <div className="flex items-center py-2 px-3 bg-white rounded-md drop-shadow-lg mb-4">
             <div className="flex flex-col text-primary font-semibold">

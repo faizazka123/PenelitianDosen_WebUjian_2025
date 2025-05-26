@@ -22,16 +22,19 @@ class ExamResource extends JsonResource
         $mapel = MataPelajaran::find($this->idMapel);
         // $pertanyaan = Pertanyaan::where('idUjian', $this->id)->get();
 
-        return[
+        return [
             'idujian' => $this->id,
             'NIP' => new GuruResource(resource: $guru),
             'idMapel' => new MapelResource($mapel),
-            // 'pertanyaan' => new PertanyaanResource($pertanyaan),
             'judul' => $this->judul,
             'deskripsi' => $this->deskripsi,
+            'jamAwal' => $this->jamAwal,
+            'jamAkhir' => $this->jamAkhir,
+            'kelas' => $this->kelas,
             'tahunAjaran' => $this->tahunAjaran,
-            'durasi' => (new Carbon($this->durasi))->format('h:i:s'),
+            'durasi' => (new Carbon($this->durasi))->format('H:i:s'),
             'kodeUjian' => $this->kodeUjian,
+            'kuota' => $this->kuota,
         ];
     }
 }

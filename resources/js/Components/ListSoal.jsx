@@ -1,4 +1,9 @@
-const ListSoal = ({ questions, onQuestionSelect, handleToggleMenu }) => {
+const ListSoal = ({
+    handleToggleMenu,
+    questions,
+    currentIndex,
+    onQuestionSelect,
+}) => {
     return (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white max-w-lg w-full rounded-lg shadow-lg fixed bottom-0 left-0">
@@ -12,35 +17,20 @@ const ListSoal = ({ questions, onQuestionSelect, handleToggleMenu }) => {
                     </button>
                 </div>
                 <div className="grid grid-cols-5 gap-4 px-5 pb-5">
+                    {/* List Soal */}
                     {questions.data.map((_, index) => (
-                        <div
-                            className="flex justify-center items-center"
-                            key={index}
-                        >
+                        <div key={index} className="flex justify-center items-center">
                             <button
-                                onClick={() => {
-                                    onQuestionSelect(index);
-                                    handleToggleMenu();
-                                }}
-                                className="bg-gray-50 border-2 border-blue-600 text-blue-600 w-11 h-10 rounded-full hover:bg-blue-600 hover:text-white"
+                                onClick={() => onQuestionSelect(index)}
+                                className={`${index === currentIndex
+                                    ? 'bg-primary text-white'
+                                    : 'bg-white text-primary'
+                                    } border-2 border-primary w-11 h-10 rounded-full`}
                             >
                                 {index + 1}
                             </button>
                         </div>
                     ))}
-                    {/* {[...Array(10)].map((_, index) => (
-                        <div
-                            className="flex justify-center items-center"
-                            key={index}
-                        >
-                            <button
-                                key={index}
-                                className="bg-gray-50 border-2 border-blue-600 text-blue-600 w-11 h-10 rounded-full hover:bg-blue-600 hover:text-white"
-                            >
-                                {index + 1}
-                            </button>
-                        </div>
-                    ))} */}
                 </div>
             </div>
         </div>

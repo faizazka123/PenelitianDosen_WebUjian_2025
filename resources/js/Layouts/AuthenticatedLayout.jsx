@@ -11,7 +11,7 @@ export default function AuthenticatedLayout({
     children,
     title,
     countdown = null,
-    duration,
+    duration = null
 }) {
     const user = usePage().props.auth.user;
 
@@ -100,7 +100,7 @@ export default function AuthenticatedLayout({
 
                         <div className="me-2 flex items-center sm:hidden">
                             {countdown ? (
-                                <PrimaryButton className="bg-orange ">
+                                <PrimaryButton className="bg-orange">
                                     <Countdown
                                         date={Date.now() + duration}
                                         renderer={countdown}

@@ -17,6 +17,7 @@ class GuruResource extends JsonResource
         return[
             'NIP' => $this->NIP,
             'nama' => $this->nama,
+            'password' => $this->password,
         ];
     }
 }

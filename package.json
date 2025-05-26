@@ -7,6 +7,7 @@
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
+        "@iconify/react": "^5.2.0",
         "@inertiajs/react": "^1.0.0",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-react": "^4.2.0",
@@ -21,7 +22,12 @@
         "vite": "^6.0"
     },
     "dependencies": {
+        "dompurify": "^3.2.5",
         "flowbite": "^2.5.2",
-        "react-countdown": "^2.3.6"
+        "react-countdown": "^2.3.6",
+        "react-data-table-component": "^7.7.0",
+        "react-quill": "^2.0.0",
+        "sweetalert2": "^11.17.2",
+        "xlsx": "^0.18.5"
     }
 }

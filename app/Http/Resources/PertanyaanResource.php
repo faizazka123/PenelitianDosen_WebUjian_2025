@@ -17,16 +17,11 @@ class PertanyaanResource extends JsonResource
     {
         $ujian = Ujian::find($this->idUjian);
 
-        return[
+        return [
             'idPertanyaan' => $this->id,
-            'idUjian' => new ExamResource(resource: $ujian),
+            'ujian_id' => new ExamResource(resource: $ujian),
             'pertanyaan' => $this->pertanyaan,
-            'pilihan1' => $this->pilihan1,
-            'pilihan2' => $this->pilihan2,
-            'pilihan3' => $this->pilihan3,
-            'pilihan4' => $this->pilihan4,
-            'pilihan5' => $this->pilihan5,
-            'jawaban' => $this->jawaban,
+            'jawabans' => JawabanResource::collection($this->jawabans),
             'image' => $this->image,
         ];
     }

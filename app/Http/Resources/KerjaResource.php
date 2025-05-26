@@ -22,10 +22,12 @@ class KerjaResource extends JsonResource
 
         return [
             'idKerja' => $this->idKerja,
-            'idMurid' => new MuridResource($murid), //foreign key
-            'idUjian' => new ExamResource(resource: $ujian), //foreign key
+            'idMurid' => new MuridResource($murid),
+            'idUjian' => new ExamResource(resource: $ujian),
             'listJawaban' => $this->listJawaban,
             'nilai' => $this->nilai,
+            'jawaban_benar' => $this->jawaban_benar,
+            'jawaban_salah' => $this->jawaban_salah,
             'isActive' => $this->isActive,
             'countKecurangan' => $this->countKecurangan,
         ];

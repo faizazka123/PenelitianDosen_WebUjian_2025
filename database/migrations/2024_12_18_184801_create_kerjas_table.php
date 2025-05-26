@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,8 +16,11 @@ return new class extends Migration
             $table->foreignId('idUjian')->constrained('ujians')->onDelete('cascade');
             $table->text('listJawaban');
             $table->integer('nilai')->nullable();
+            $table->integer('jawaban_benar')->nullable()->default(null);
+            $table->integer('jawaban_salah')->nullable()->default(null);
             $table->boolean('isActive');
-            $table->integer('countKecurangan')->default(0);
+            $table->boolean('isCheating')->default(false);
+            $table->json('random_pertanyaan')->nullable();
             $table->timestamps();
         });
     }

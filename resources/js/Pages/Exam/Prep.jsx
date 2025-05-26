@@ -1,9 +1,12 @@
 import { Head, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Card from "@/Components/Card";
+import DOMPurify from 'dompurify';
 import { useEffect } from "react";
 
 export default function Prep({ kerja, jumlahSoal }) {
+
+    console.log(kerja)
 
     useEffect(() => {
         if (localStorage.getItem("examStartTime")) {
@@ -68,15 +71,17 @@ export default function Prep({ kerja, jumlahSoal }) {
                                 Durasi : <span>{kerja.idUjian.durasi}</span>
                             </p>
                         </div>
-                        <p className="mb-3 font-normal text-primary">
-                            {kerja.idUjian.deskripsi}
-                        </p>
+                        <p className="mb-3 font-normal text-primary"
+                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(kerja.idUjian.deskripsi) }}
+                        />
                         <div className="mt-5 flex justify-end">
-                            <a href={route("kerjas.soal", { id: kerja.idKerja })} className="w-2/6">
-                                <button className="w-full bg-blue-700 rounded-lg text-white py-1 px-4">
+                            <form method="POST" action={route("kerja.mulai", { id: kerja.idKerja })}>
+                                <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]').getAttribute('content')} />
+
+                                <button type="submit" className="w-full bg-blue-700 rounded-lg text-white py-1 px-4">
                                     Mulai
                                 </button>
-                            </a>
+                            </form>
                         </div>
                     </div>
                 </div>

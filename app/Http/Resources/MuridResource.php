@@ -19,6 +19,7 @@ class MuridResource extends JsonResource
             "nis" => $this->nis,
             "nama" => $this->nama,
             "kelas" => $this->kelas,
+            "password" => $this->password,
         ];
     }
 }
