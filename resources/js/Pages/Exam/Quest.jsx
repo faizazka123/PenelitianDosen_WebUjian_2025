@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 
 export default function Quest({ kerja, pertanyaan }) {
     const { jawabanSiswa } = usePage().props;
+    const sirenRef = useRef(null);
 
     const convertToMap = (array) => {
         const map = {};
@@ -155,6 +156,11 @@ export default function Quest({ kerja, pertanyaan }) {
     const [violations, setViolations] = useState(0);
 
     useEffect(() => {
+        sirenRef.current = new Audio("/audio/sirene.mp3");
+        sirenRef.current.loop = false;
+    }, []);
+
+    useEffect(() => {
         const handleBlur = () => {
             setViolations((prev) => {
                 const updated = prev + 1;
@@ -182,6 +188,13 @@ export default function Quest({ kerja, pertanyaan }) {
 
     useEffect(() => {
         if (violations >= 2) {
+
+            if (sirenRef.current) {
+                sirenRef.current.play().catch((e) => {
+                    console.warn("Gagal memutar suara:", e);
+                });
+            }
+
             router.post(route('ujian.caught', kerja.idKerja), {}, {
                 onSuccess: () => {
                     localStorage.removeItem(key);
