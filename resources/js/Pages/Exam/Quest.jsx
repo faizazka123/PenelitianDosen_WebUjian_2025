@@ -205,7 +205,7 @@ export default function Quest({ kerja, pertanyaan }) {
                 }
             });
         }
-    }, [violations]); // Jalankan efek setiap kali violations berubah
+    }, [violations]);
 
     return (
         <AuthenticatedLayout
