@@ -37,8 +37,8 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                                     )
                                 }
                                 className={`${showingNavigationDropdown
-                                        ? "rotate-90 "
-                                        : ""
+                                    ? "rotate-90 "
+                                    : ""
                                     } inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-300 ease-in-out`}
                             >
                                 <svg
@@ -81,9 +81,9 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                         </ResponsiveNavLink>
                         <div className="border-t border-gray-200">
                             <ResponsiveNavLink
-                                href={route("logout")}
+                                href={route("logoutGuru")}
                                 method="post"
-                                active={route().current("logout")}
+                                active={route().current("logoutGuru")}
                                 as="button"
                             >
                                 Logout
@@ -155,7 +155,7 @@ const GuruAuthenticatedLayout = ({ header, children }) => {
                     </div>
                     <div className="px-8 mb-[8rem]">
                         <SideNavLink
-                            href={route("logout")}
+                            href={route("logoutGuru")}
                             method="post"
                             as="button"
                         >

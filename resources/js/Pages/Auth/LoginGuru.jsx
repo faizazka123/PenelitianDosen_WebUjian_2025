@@ -8,15 +8,14 @@ import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function LoginGuru({ status }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        nip: "",
+        NIP: "",
         password: "",
-        rememberMe: "",
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("login"), {
+        post(route('loginGuru'), {
             onFinish: () => reset("password"),
         });
     };
@@ -33,22 +32,25 @@ export default function LoginGuru({ status }) {
 
             <form onSubmit={submit}>
                 <div>
+                    <InputLabel htmlFor="NIP" value="Nomor Induk Pegawai" />
+
                     <TextInput
-                        id="nip"
+                        id="NIP"
                         type="text"
-                        name="nip"
-                        value={data.nip}
+                        name="NIP"
+                        value={data.NIP}
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
-                        placeholder="Nip...."
-                        onChange={(e) => setData("nip", e.target.value)}
+                        onChange={(e) => setData("NIP", e.target.value)}
                     />
 
-                    <InputError message={errors.nip} className="mt-2" />
+                    <InputError message={errors.NIP} className="mt-2" />
                 </div>
 
                 <div className="mt-7">
+                    <InputLabel htmlFor="password" value="password" />
+
                     <TextInput
                         id="password"
                         type="password"
@@ -56,26 +58,10 @@ export default function LoginGuru({ status }) {
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
-                        placeholder="Password..."
                         onChange={(e) => setData("password", e.target.value)}
                     />
 
                     <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-7 flex gap-2">
-                    <TextInput
-                        id="rememberMe"
-                        type="checkbox"
-                        name="rememberMe"
-                        value={data.rememberMe}
-                        className="mt-[0.2rem] block bg-abu_tua"
-                        autoComplete="current-password"
-                        onChange={(e) => setData("rememberMe", e.target.value)}
-                    />
-                    <InputLabel htmlFor="rememberMe" value="Ingat Saya" />
-
-                    <InputError message={errors.rememberMe} className="mt-2" />
                 </div>
 
                 <div className="mt-7 flex items-center justify-center mb-4">

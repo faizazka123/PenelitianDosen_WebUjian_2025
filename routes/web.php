@@ -18,16 +18,25 @@ Route::get('/', function () {
         : redirect()->route('login');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:web')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index'])->name('dashboard');
     Route::get('/nilai', [DashboardSiswaController::class, 'indexNilai'])->name('nilai');
 
-
     Route::post('/kerjas', [DashboardSiswaController::class, 'masukUjian'])->name('kerjas.store');
 
-    // Route::get('/ujian/{idKerja}', [ExamController::class, 'index'])->name('ujian');
+    Route::get('ujian/{id}', [ExamController::class, 'prep'])->name('kerja.show');
+    Route::post('/ujian/{id}/start', [ExamController::class, 'start'])->name('kerja.mulai');
+    Route::get('/ujian/{id}/start', [ExamController::class, 'startExam'])->name('kerjas.soal');
+    Route::post('/ujian/{kerja}/jawab', [ExamController::class, 'simpanJawaban'])->name('jawaban.simpan');
+    Route::post('/ujian/{kerja}/finish', [ExamController::class, 'selesaikanUjian'])->name('ujian.selesai');
+    Route::post('/ujian/{kerja}/caught', [ExamController::class, 'caught'])->name('ujian.caught');
 
-    // Route::resource('ujian', ExamController::class);
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware('auth:guru')->group(function () {
     Route::get('guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard');
     Route::get('guru/ujian/daftar', [DashboardGuruController::class, 'ujian'])->name('guru.daftar');
     Route::get('guru/nilai', [DashboardGuruController::class, 'nilai'])->name('guru.nilai');
@@ -54,17 +63,6 @@ Route::middleware('auth')->group(function () {
     Route::get('guru/ujian/{id}/generate', [DashboardGuruController::class, 'generate'])->name('guru.generate');
     Route::post('guru/ujian/{id}/generate', [DashboardGuruController::class, 'storeKode'])->name('guru.storeKode');
 
-    Route::get('ujian/{id}', [ExamController::class, 'prep'])->name('kerja.show');
-    Route::post('/ujian/{id}/start', [ExamController::class, 'start'])->name('kerja.mulai');
-    Route::get('/ujian/{id}/start', [ExamController::class, 'startExam'])->name('kerjas.soal');
-    Route::post('/ujian/{kerja}/jawab', [ExamController::class, 'simpanJawaban'])->name('jawaban.simpan');
-    Route::post('/ujian/{kerja}/finish', [ExamController::class, 'selesaikanUjian'])->name('ujian.selesai');
-    Route::post('/ujian/{kerja}/caught', [ExamController::class, 'caught'])->name('ujian.caught');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::get('guru/admin', [AdminController::class, 'index'])->name('guru.admin');
     Route::get('guru/admin/data/guru', [AdminController::class, 'viewDataGuru'])->name('guru.dataGuru');
     Route::get('guru/admin/data/murid', [AdminController::class, 'viewDataSiswa'])->name('guru.dataSiswa');
@@ -87,5 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::match(['put', 'patch'], 'guru/admin/data/guru/{guru}', [AdminController::class, 'guruUpdate'])->name('guru.guruUpdate');
     Route::match(['put', 'patch'], 'guru/admin/data/siswa/{id}', [AdminController::class, 'siswaUpdate'])->name('guru.siswaUpdate');
 });
+
+
 
 require __DIR__ . '/auth.php';
