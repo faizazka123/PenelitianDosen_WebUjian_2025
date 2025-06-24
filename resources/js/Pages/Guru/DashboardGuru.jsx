@@ -151,7 +151,7 @@ const DashboardGuru = ({ ujians }) => {
                                     <tr>
                                         <td
                                             className="border px-4 py-2 text-center"
-                                            colSpan="5"
+                                            colSpan="8"
                                         >
                                             Belum ada Ujian
                                         </td>

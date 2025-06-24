@@ -66,7 +66,7 @@ export default function Login({ status }) {
 
                 <div className="mt-4 flex items-center justify-center">
 
-                    <PrimaryButton className="w-full" disabled={processing}>
+                    <PrimaryButton className="w-full !bg-primary" disabled={processing}>
                         Log in
                     </PrimaryButton>
                 </div>

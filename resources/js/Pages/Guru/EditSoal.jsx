@@ -3,12 +3,15 @@ import Card from "@/Components/Card";
 import InputLabel from "@/Components/InputLabel";
 import GuruAuthenticatedLayout from "@/Layouts/GuruAuthenticatedLayout";
 import DOMPurify from 'dompurify';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import InputError from "@/Components/InputError";
 import { router } from "@inertiajs/react";
+import { Icon } from "@iconify/react";
 
 const EditSoal = ({ ujian, pertanyaan }) => {
+    console.log(pertanyaan);
+
     const [pertanyaanList, setPertanyaanList] = useState([
         {
             isi: "",
@@ -19,6 +22,21 @@ const EditSoal = ({ ujian, pertanyaan }) => {
             ],
         },
     ]);
+
+    useEffect(() => {
+        const converted = pertanyaan.data.map(p => ({
+            id: p.idPertanyaan,
+            isi: p.pertanyaan,
+            gambar: null,
+            jawabanList: p.jawabans.map(j => ({
+                id: j.idJawaban,
+                isi: j.text,
+                gambar: null,
+                benar: j.jawaban_benar,
+            }))
+        }));
+        setPertanyaanList(converted);
+    }, []);
 
     const handleSubmit = () => {
         const formData = new FormData();
@@ -36,7 +54,8 @@ const EditSoal = ({ ujian, pertanyaan }) => {
             });
         });
 
-        router.post("/guru/soal", formData);
+        formData.append('_method', 'PATCH');
+        router.post(route('guru.updateSoal', ujian.data.idujian), formData);
     };
 
     const tambahPertanyaan = () => {
@@ -53,6 +72,17 @@ const EditSoal = ({ ujian, pertanyaan }) => {
         ]);
     };
 
+    const hapusPertanyaan = (indexPertanyaan) => {
+        if (pertanyaanList.length <= 1) {
+            alert("Minimal harus ada 1 pertanyaan.");
+            return;
+        }
+
+        const newList = [...pertanyaanList];
+        newList.splice(indexPertanyaan, 1);
+        setPertanyaanList(newList);
+    };
+
     const tambahJawaban = (indexPertanyaan) => {
         const newList = [...pertanyaanList];
         newList[indexPertanyaan].jawabanList.push({
@@ -63,6 +93,16 @@ const EditSoal = ({ ujian, pertanyaan }) => {
         setPertanyaanList(newList);
     };
 
+    const hapusJawaban = (indexPertanyaan, indexJawaban) => {
+        if (pertanyaanList[indexPertanyaan].jawabanList.length <= 2) {
+            alert("Minimal harus ada 2 jawaban dalam satu pertanyaan.");
+            return;
+        }
+
+        const newList = [...pertanyaanList];
+        newList[indexPertanyaan].jawabanList.splice(indexJawaban, 1);
+        setPertanyaanList(newList);
+    };
     const setJawabanBenar = (indexPertanyaan, indexJawaban) => {
         const newList = [...pertanyaanList];
         newList[indexPertanyaan].jawabanList = newList[indexPertanyaan].jawabanList.map((j, i) => ({
@@ -71,8 +111,6 @@ const EditSoal = ({ ujian, pertanyaan }) => {
         }));
         setPertanyaanList(newList);
     };
-
-    console.log(ujian.data.idujian)
 
     return (
         <GuruAuthenticatedLayout>
@@ -114,6 +152,17 @@ const EditSoal = ({ ujian, pertanyaan }) => {
                                         {pertanyaan.gambar?.name || "Tidak ada gambar yang terpilih"}
                                     </span>
                                 </div>
+                            </div>
+                            {/* Soal Delete */}
+                            <div className="pt-6">
+                                <button onClick={() => hapusPertanyaan(indexP)}>
+                                    <Icon
+                                        icon="lets-icons:trash"
+                                        width="30"
+                                        height="30"
+                                        color="#f00"
+                                    />
+                                </button>
                             </div>
                         </div>
 
@@ -165,6 +214,17 @@ const EditSoal = ({ ujian, pertanyaan }) => {
                                                 <label className="text-sm">Atur Sebagai Jawaban</label>
                                             </div>
                                         </div>
+                                    </div>
+                                    {/* Delete Jawawban */}
+                                    <div className="pt-6">
+                                        <button onClick={() => hapusJawaban(indexP, indexJ)}>
+                                            <Icon
+                                                icon="lets-icons:trash"
+                                                width="30"
+                                                height="30"
+                                                color="#f00"
+                                            />
+                                        </button>
                                     </div>
                                 </div>
                             ))}

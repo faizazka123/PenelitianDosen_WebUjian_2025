@@ -51,12 +51,16 @@ Route::middleware('auth:guru')->group(function () {
     Route::delete('guru/ujian/{id}', [DashboardGuruController::class, 'hapusUjian'])->name('guru.hapusUjian');
 
     Route::get('guru/ujian/{id}/soal', [DashboardGuruController::class, 'soal'])->name('guru.soal');
+
     Route::get('guru/ujian/{id}/soal/tambah', [DashboardGuruController::class, 'createSoal'])->name('guru.tambahSoal');
+    Route::post('/guru/soal', [DashboardGuruController::class, 'storeSoal'])->name('guru.storeSoal');
+
     Route::get('guru/ujian/{id}/soal/edit', [DashboardGuruController::class, 'editSoal'])->name('guru.editSoal');
     Route::match(['put', 'patch'], 'guru/ujian/{id}/soal/edit', [DashboardGuruController::class, 'updateSoal'])->name('guru.updateSoal');
+
     Route::get('guru/ujian/{id}/soal/import', [DashboardGuruController::class, 'importSoal'])->name('guru.importSoal');
     Route::post('guru/ujian/{id}/soal/import', [DashboardGuruController::class, 'storeImportSoal'])->name('guru.storeImportSoal');
-    Route::post('/guru/soal', [DashboardGuruController::class, 'storeSoal'])->name('guru.storeSoal');
+
     Route::delete('guru/soal/{id}', [DashboardGuruController::class, 'hapusSoal'])->name('guru.soalHapus');
 
     Route::get('guru/ujian/{id}/kode', [DashboardGuruController::class, 'showKode'])->name('guru.kode');

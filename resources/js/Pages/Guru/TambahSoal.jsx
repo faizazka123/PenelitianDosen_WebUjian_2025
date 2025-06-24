@@ -7,6 +7,7 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import InputError from "@/Components/InputError";
 import { router } from "@inertiajs/react";
+import { Icon } from "@iconify/react";
 
 const TambahSoal = ({ ujian, pertanyaan }) => {
     const [pertanyaanList, setPertanyaanList] = useState([
@@ -53,6 +54,17 @@ const TambahSoal = ({ ujian, pertanyaan }) => {
         ]);
     };
 
+    const hapusPertanyaan = (indexPertanyaan) => {
+        if (pertanyaanList.length <= 1) {
+            alert("Minimal harus ada 1 pertanyaan.");
+            return;
+        }
+
+        const newList = [...pertanyaanList];
+        newList.splice(indexPertanyaan, 1);
+        setPertanyaanList(newList);
+    };
+
     const tambahJawaban = (indexPertanyaan) => {
         const newList = [...pertanyaanList];
         newList[indexPertanyaan].jawabanList.push({
@@ -63,6 +75,16 @@ const TambahSoal = ({ ujian, pertanyaan }) => {
         setPertanyaanList(newList);
     };
 
+    const hapusJawaban = (indexPertanyaan, indexJawaban) => {
+        if (pertanyaanList[indexPertanyaan].jawabanList.length <= 2) {
+            alert("Minimal harus ada 2 jawaban dalam satu pertanyaan.");
+            return;
+        }
+
+        const newList = [...pertanyaanList];
+        newList[indexPertanyaan].jawabanList.splice(indexJawaban, 1);
+        setPertanyaanList(newList);
+    };
     const setJawabanBenar = (indexPertanyaan, indexJawaban) => {
         const newList = [...pertanyaanList];
         newList[indexPertanyaan].jawabanList = newList[indexPertanyaan].jawabanList.map((j, i) => ({
@@ -112,6 +134,17 @@ const TambahSoal = ({ ujian, pertanyaan }) => {
                                         {pertanyaan.gambar?.name || "Tidak ada gambar yang terpilih"}
                                     </span>
                                 </div>
+                            </div>
+                            {/* Soal Delete */}
+                            <div className="pt-6">
+                                <button onClick={() => hapusPertanyaan(indexP)}>
+                                    <Icon
+                                        icon="lets-icons:trash"
+                                        width="30"
+                                        height="30"
+                                        color="#f00"
+                                    />
+                                </button>
                             </div>
                         </div>
 
@@ -163,6 +196,17 @@ const TambahSoal = ({ ujian, pertanyaan }) => {
                                                 <label className="text-sm">Atur Sebagai Jawaban</label>
                                             </div>
                                         </div>
+                                    </div>
+                                    {/* Delete Jawawban */}
+                                    <div className="pt-6">
+                                        <button onClick={() => hapusJawaban(indexP, indexJ)}>
+                                            <Icon
+                                                icon="lets-icons:trash"
+                                                width="30"
+                                                height="30"
+                                                color="#f00"
+                                            />
+                                        </button>
                                     </div>
                                 </div>
                             ))}

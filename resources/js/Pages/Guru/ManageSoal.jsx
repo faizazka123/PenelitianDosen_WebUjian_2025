@@ -43,6 +43,10 @@ const ManageSoal = ({ ujian, pertanyaan }) => {
         });
     };
 
+    const handleEdit = (ujianId) => {
+        router.get(`/guru/ujian/${ujianId}/soal/edit`);
+    };
+
     return (
         <GuruAuthenticatedLayout>
             <div className="flex flex-col justify-center items-center gap-5">
@@ -106,7 +110,7 @@ const ManageSoal = ({ ujian, pertanyaan }) => {
                                             </div>
                                         </td>
                                         <td className="px-4 py-2 text-sm text-center align-top space-x-2">
-                                            <button onClick={() => handleEdit(item.idPertanyaan)}>
+                                            <button onClick={() => handleEdit(ujian.data.idujian)}>
                                                 <img src={`${window.LARAVEL_URL}/material_edit.png`} width={25} />
                                             </button>
                                             <button onClick={() => handleDelete(item.idPertanyaan)}>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreUjianRequest;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\KerjaResource;
@@ -221,6 +222,74 @@ class DashboardGuruController extends Controller
             'ujian' => new ExamResource($ujian),
             'pertanyaan' => PertanyaanResource::collection($ujian->pertanyaan),
         ]);
+    }
+
+    public function updateSoal(Request $request, $id)
+    {
+
+        $pertanyaans = $request->input('pertanyaan');
+        $ujian_id = $request->input('ujian_id');
+
+        // Hapus semua soal lama
+        $pertanyaanLama = Pertanyaan::with('jawabans')->where('ujian_id', $ujian_id)->get();
+
+
+        foreach ($pertanyaanLama as $pertanyaan) {
+            if ($pertanyaan->image) {
+                Storage::disk('public')->delete($pertanyaan->image);
+            }
+
+            foreach ($pertanyaan->jawabans as $jawaban) {
+                if ($jawaban->image) {
+                    Storage::disk('public')->delete($jawaban->image);
+                }
+                $jawaban->delete();
+            }
+
+            $pertanyaan->delete();
+        }
+
+
+        foreach ($pertanyaans as $pIndex => $p) {
+            if (!empty($p['id'])) {
+                $pertanyaan = Pertanyaan::find($p['id']);
+            } else {
+                $pertanyaan = new Pertanyaan();
+                $pertanyaan->ujian_id = $ujian_id;
+            }
+
+            $pertanyaan->pertanyaan = $p['isi'];
+
+            if ($request->hasFile("pertanyaan.$pIndex.gambar")) {
+                if ($pertanyaan->image) {
+                    Storage::disk('public')->delete($pertanyaan->image);
+                }
+                $path = $request->file("pertanyaan.$pIndex.gambar")->store("gambar/pertanyaan", "public");
+                $pertanyaan->image = $path;
+            }
+
+            $pertanyaan->save();
+
+            if (!empty($p['id'])) {
+                Jawaban::where('pertanyaan_id', $pertanyaan->id)->delete();
+            }
+
+            foreach ($p['jawaban'] as $jIndex => $j) {
+                $jawaban = new Jawaban();
+                $jawaban->pertanyaan_id = $pertanyaan->id;
+                $jawaban->text = $j['isi'];
+                $jawaban->jawaban_benar = $j['benar'] ? 1 : 0;
+
+                if ($request->hasFile("pertanyaan.$pIndex.jawaban.$jIndex.gambar")) {
+                    $path = $request->file("pertanyaan.$pIndex.jawaban.$jIndex.gambar")->store("gambar/jawaban", "public");
+                    $jawaban->image = $path;
+                }
+
+                $jawaban->save();
+            }
+        }
+
+        return redirect()->route('guru.soal', $ujian_id)->with('success', 'Soal berhasil diperbarui!');
     }
 
     public function importSoal($id)
