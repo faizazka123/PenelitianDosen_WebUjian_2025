@@ -27,6 +27,7 @@
         "react-countdown": "^2.3.6",
         "react-data-table-component": "^7.7.0",
         "react-quill": "^2.0.0",
+        "styled-components": "^6.1.19",
         "sweetalert2": "^11.17.2",
         "xlsx": "^0.18.5"
     }

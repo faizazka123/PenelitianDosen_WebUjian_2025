@@ -29,8 +29,15 @@ class DashboardGuruController extends Controller
     {
         $guru = auth()->guard('guru')->user();
         $ujians = Ujian::where('NIP', $guru->NIP)->orderBy('created_at', 'desc')->paginate(5);
+        $ujianAktif = Ujian::where('NIP', $guru->NIP)
+            ->whereNotNull('kodeUjian')->count();
+        $ujianTaktif = Ujian::where('NIP', $guru->NIP)
+            ->whereNull('kodeUjian')->count();
+
         return Inertia('Guru/DashboardGuru', [
             'ujians' => ExamResource::collection($ujians),
+            'ujianAktif' => $ujianAktif,
+            'ujianTaktif' => $ujianTaktif,
         ]);
     }
 

@@ -5,18 +5,29 @@ import Card from "@/Components/Card";
 import CardList from "@/Components/CardList";
 import GuruAuthenticatedLayout from "@/Layouts/GuruAuthenticatedLayout";
 import CardUjian from "@/Components/CardUjian";
+import { router } from "@inertiajs/react";
 
-const DashboardGuru = ({ ujians }) => {
+const DashboardGuru = ({ ujians, ujianAktif, ujianTaktif }) => {
     const { flash } = usePage().props;
 
-    console.log({ ujians });
+    const handleDelete = (ujianId) => {
+        router.delete(route("guru.hapusUjian", ujianId));
+    };
 
     return (
         <GuruAuthenticatedLayout>
             <Head title="Dashboard" />
             <div className="flex mx-auto flex-row gap-5 w-11/12">
-                <CardUjian background="bg-biru_tua" title="Jumlah Ujian Aktif" guru={50} />
-                <CardUjian background="bg-biru_muda" title="Jumlah Ujian Menunggu" siswa={50} />
+                <CardUjian
+                    background="bg-biru_tua"
+                    title="Jumlah Ujian Aktif"
+                    guru={ujianAktif}
+                />
+                <CardUjian
+                    background="bg-biru_muda"
+                    title="Jumlah Ujian Menunggu"
+                    siswa={ujianTaktif}
+                />
             </div>
 
             <div className="py-7">
@@ -51,7 +62,7 @@ const DashboardGuru = ({ ujians }) => {
                             <h3 className="text-xl border-b-2 shadow-md border-black font-bold">
                                 <div className="flex justify-between">
                                     <span>Daftar Ujian</span>
-                                    <a href={route('guru.daftar')}>
+                                    <a href={route("guru.daftar")}>
                                         <button className="text-blue-500">
                                             More
                                         </button>
@@ -63,12 +74,20 @@ const DashboardGuru = ({ ujians }) => {
                             <thead>
                                 <tr>
                                     <th className="border px-4 py-2">No</th>
-                                    <th className="border px-4 py-2">Mata Pelajaran</th>
+                                    <th className="border px-4 py-2">
+                                        Mata Pelajaran
+                                    </th>
                                     <th className="border px-4 py-2">Judul</th>
-                                    <th className="border px-4 py-2 hidden sm:table-cell">Tahun Ajaran</th>
+                                    <th className="border px-4 py-2 hidden sm:table-cell">
+                                        Tahun Ajaran
+                                    </th>
                                     <th className="border px-4 py-2">Detail</th>
-                                    <th className="border px-4 py-2">Tambah Soal</th>
-                                    <th className="border px-4 py-2">Generate Kode</th>
+                                    <th className="border px-4 py-2">
+                                        Tambah Soal
+                                    </th>
+                                    <th className="border px-4 py-2">
+                                        Generate Kode
+                                    </th>
                                     <th className="border px-4 py-2">Aksi</th>
                                 </tr>
                             </thead>
@@ -89,7 +108,12 @@ const DashboardGuru = ({ ujians }) => {
                                                 {ujian.tahunAjaran}
                                             </td>
                                             <td className="border px-4 py-2">
-                                                <a href={route('guru.detail', ujian.idujian)}>
+                                                <a
+                                                    href={route(
+                                                        "guru.detail",
+                                                        ujian.idujian
+                                                    )}
+                                                >
                                                     <button
                                                         className={`px-4 py-2 rounded-md bg-blue-500 text-white`}
                                                     >
@@ -98,7 +122,12 @@ const DashboardGuru = ({ ujians }) => {
                                                 </a>
                                             </td>
                                             <td className="border px-4 py-2">
-                                                <a href={route('guru.soal', ujian.idujian)}>
+                                                <a
+                                                    href={route(
+                                                        "guru.soal",
+                                                        ujian.idujian
+                                                    )}
+                                                >
                                                     <button
                                                         className={`px-4 py-2 rounded-md bg-yellow-400 text-white`}
                                                     >
@@ -107,7 +136,14 @@ const DashboardGuru = ({ ujians }) => {
                                                 </a>
                                             </td>
                                             <td className="border px-4 py-2">
-                                                <a href={route(ujian.kodeUjian ? 'guru.kode' : 'guru.generate', ujian.idujian)}>
+                                                <a
+                                                    href={route(
+                                                        ujian.kodeUjian
+                                                            ? "guru.kode"
+                                                            : "guru.generate",
+                                                        ujian.idujian
+                                                    )}
+                                                >
                                                     <button
                                                         className={`px-4 py-2 rounded-md bg-green-500 text-white`}
                                                     >
@@ -130,13 +166,24 @@ const DashboardGuru = ({ ujians }) => {
                                                     </button>
                                                 </a> */}
                                                 <div className="flex gap-5">
-                                                    <Link >
+                                                    <Link
+                                                        href={route(
+                                                            "guru.editUjian",
+                                                            ujian.idujian
+                                                        )}
+                                                    >
                                                         <img
                                                             src={`${window.LARAVEL_URL}/material_edit.png`}
                                                             width={25}
                                                         />
                                                     </Link>
-                                                    <button>
+                                                    <button
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                ujian.idujian
+                                                            )
+                                                        }
+                                                    >
                                                         <img
                                                             src={`${window.LARAVEL_URL}/material_delete.png`}
                                                             width={25}
@@ -166,4 +213,3 @@ const DashboardGuru = ({ ujians }) => {
     );
 };
 export default DashboardGuru;
-
