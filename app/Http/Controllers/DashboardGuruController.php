@@ -123,10 +123,16 @@ class DashboardGuruController extends Controller
     {
         $data = $request->validated();
 
-        $jamAwal = Carbon::createFromFormat('H:i:s', $request->jamAwal);
-        $jamAkhir = Carbon::createFromFormat('H:i:s', $request->jamAkhir);
+        if (isset($data['idMapel']) && is_array($data['idMapel'])) {
+        $data['idMapel'] = $data['idMapel']['idMapel'] ?? $data['idMapel']['id'] ?? null;
+    }
+
+        $jamAwal = Carbon::createFromFormat('H:i', $request->jamAwal);
+        $jamAkhir = Carbon::createFromFormat('H:i', $request->jamAkhir);
         $durasi = $jamAkhir->diff($jamAwal)->format('%H:%I:%S');
 
+        $data['jamAwal'] = $jamAwal->format('H:i');
+        $data['jamAkhir'] = $jamAkhir->format('H:i');
         $data['durasi'] = $durasi;
 
         $guru = auth()->guard('guru')->user();
