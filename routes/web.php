@@ -26,7 +26,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::get('ujian/{id}', [ExamController::class, 'prep'])->name('kerja.show');
     Route::post('/ujian/{id}/start', [ExamController::class, 'start'])->name('kerja.mulai');
-    Route::get('/ujian/{id}/start', [ExamController::class, 'startExam'])->name('kerjas.soal');
+    Route::get('/ujian/{id}/startExamSession', [ExamController::class, 'startExam'])->name('kerjas.soal');
     Route::post('/ujian/{kerja}/jawab', [ExamController::class, 'simpanJawaban'])->name('jawaban.simpan');
     Route::post('/ujian/{kerja}/finish', [ExamController::class, 'selesaikanUjian'])->name('ujian.selesai');
     Route::post('/ujian/{kerja}/caught', [ExamController::class, 'caught'])->name('ujian.caught');
