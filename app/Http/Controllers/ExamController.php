@@ -56,9 +56,8 @@ class ExamController extends Controller
         }
 
         session(['ujian_dimulai_' . $kerja->idKerja => true]);
-        session()->save();
 
-        return redirect()->route('kerjas.soal', ['id' => $kerja->idKerja]);
+        return redirect()->route('kerjas.soal', $kerja->idKerja);
     }
 
     public function startExam($id)

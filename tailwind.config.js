@@ -29,7 +29,7 @@ export default {
                 biru_muda: "#0D4E85",
                 biru_tua: "#0F67B1",
                 notif1: "#DCE5F6",
-                notif2: "#D9D9D9",
+                notif2: "#f0f0f0",
                 btn_hijau: '#05891B',
                 btn_biru: '#0750A6',
                 btn_kuning: '#976E05',
