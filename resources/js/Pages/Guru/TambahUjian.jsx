@@ -155,7 +155,7 @@ const TambahUjian = ({ mapels }) => {
                             className="w-full text-center py-2 border-none focus:outline-none"
                         />
 
-                        <div className="w-24 text-center font-bold bg-gray-200 py-2">
+                        <div className="w-24 text-center font-bold bg-abu_input_waktu py-2">
                             SD
                         </div>
 
@@ -177,7 +177,7 @@ const TambahUjian = ({ mapels }) => {
                     <PrimaryButton className="!px-10">Batal</PrimaryButton>
 
                     <PrimaryButton
-                        className="!px-10 !bg-hijau"
+                        className="!px-10 !bg-btn_hijau hover:!bg-green-700"
                         disabled={processing}
                     >
                         Simpan

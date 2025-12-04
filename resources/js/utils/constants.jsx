@@ -465,7 +465,7 @@ export const columnsTabel6 = () => {
                 // console.log(row)
                 <a href={route('guru.detail', row.id)}>
                     <button
-                        className={`px-4 py-2 rounded-md bg-blue-500 text-white`}
+                        className={`px-4 py-2 rounded-md bg-btn_biru text-white`}
                     >
                         Detail
                     </button>
@@ -478,7 +478,7 @@ export const columnsTabel6 = () => {
                 return (
                     <a href={route('guru.detailNilai', row.id)}>
                         <button
-                            className={`px-4 py-2 rounded-md bg-yellow-400 text-white`}
+                            className={`px-4 py-2 rounded-md bg-btn_kuning text-white`}
                         >
                             Detail
                         </button>
