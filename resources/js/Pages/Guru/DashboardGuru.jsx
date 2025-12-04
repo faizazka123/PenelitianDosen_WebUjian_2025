@@ -107,7 +107,7 @@ const DashboardGuru = ({ ujians, ujianAktif, ujianTaktif }) => {
                                             <td className="border px-4 py-2 hidden sm:table-cell">
                                                 {ujian.tahunAjaran}
                                             </td>
-                                            <td className="border px-4 py-2">
+                                            <td className="border px-4 py-2 text-center">
                                                 <a
                                                     href={route(
                                                         "guru.detail",
@@ -115,13 +115,13 @@ const DashboardGuru = ({ ujians, ujianAktif, ujianTaktif }) => {
                                                     )}
                                                 >
                                                     <button
-                                                        className={`px-4 py-2 rounded-md bg-blue-500 text-white`}
+                                                        className={`px-4 py-1 rounded-md bg-btn_biru text-white w-24`}
                                                     >
                                                         Detail
                                                     </button>
                                                 </a>
                                             </td>
-                                            <td className="border px-4 py-2">
+                                            <td className="border px-4 py-2 text-center">
                                                 <a
                                                     href={route(
                                                         "guru.soal",
@@ -129,13 +129,13 @@ const DashboardGuru = ({ ujians, ujianAktif, ujianTaktif }) => {
                                                     )}
                                                 >
                                                     <button
-                                                        className={`px-4 py-2 rounded-md bg-yellow-400 text-white`}
+                                                        className={`px-4 py-1 rounded-md bg-btn_kuning text-white w-24`}
                                                     >
                                                         Soal
                                                     </button>
                                                 </a>
                                             </td>
-                                            <td className="border px-4 py-2">
+                                            <td className="border px-4 py-2 text-center">
                                                 <a
                                                     href={route(
                                                         ujian.kodeUjian
@@ -145,7 +145,7 @@ const DashboardGuru = ({ ujians, ujianAktif, ujianTaktif }) => {
                                                     )}
                                                 >
                                                     <button
-                                                        className={`px-4 py-2 rounded-md bg-green-500 text-white`}
+                                                        className={`px-4 py-1 q rounded-md bg-btn_hijau text-white w-24`}
                                                     >
                                                         Generate
                                                     </button>

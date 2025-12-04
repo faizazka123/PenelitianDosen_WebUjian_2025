@@ -30,7 +30,7 @@ export const columnsTabel = () => {
             name: "Detail",
             cell: (row) => {
                 return (
-                    <PrimaryButton className="bg-primary px-10 !py-1 w-full">
+                    <PrimaryButton className="bg-btn_biru px-10 !py-1 w-full">
                         Detail
                     </PrimaryButton>
                 );
@@ -40,7 +40,7 @@ export const columnsTabel = () => {
             name: "Tambah Soal",
             cell: (row) => {
                 return (
-                    <PrimaryButton className="bg-kuning px-10 !py-1 w-full">
+                    <PrimaryButton className="bg-btn_kuning px-10 !py-1 w-full">
                         Detail
                     </PrimaryButton>
                 );
@@ -50,7 +50,7 @@ export const columnsTabel = () => {
             name: "Generate Code",
             cell: (row) => {
                 return (
-                    <PrimaryButton className="bg-hijau px-10 !py-1 w-full">
+                    <PrimaryButton className="bg-btn_hijau px-10 !py-1 w-full">
                         Generate
                     </PrimaryButton>
                 );
@@ -348,7 +348,7 @@ export const columnsTabel5 = () => {
                 // console.log(row)
                 <a href={route('guru.detail', row.id)}>
                     <button
-                        className={`px-4 py-2 rounded-md bg-blue-500 text-white`}
+                        className={`px-4 py-2 rounded-md bg-btn_biru text-white w-24`}
                     >
                         Detail
                     </button>
@@ -361,7 +361,7 @@ export const columnsTabel5 = () => {
                 return (
                     <a href={route('guru.soal', row.id)}>
                         <button
-                            className={`px-4 py-2 rounded-md bg-yellow-400 text-white`}
+                            className={`px-4 py-2 rounded-md bg-btn_kuning text-white w-24`}
                         >
                             Soal
                         </button>
@@ -376,7 +376,7 @@ export const columnsTabel5 = () => {
                 return (
                     <a href={route(row.kodeUjian ? 'guru.kode' : 'guru.generate', row.id)}>
                         <button
-                            className={`px-4 py-2 rounded-md bg-green-500 text-white`}
+                            className={`px-4 py-2 rounded-md bg-btn_hijau text-white w-24`}
                         >
                             Generate
                         </button>
